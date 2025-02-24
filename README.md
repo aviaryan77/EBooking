@@ -1,97 +1,72 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Mini Dashboard
 
-# Getting Started
+## 📌 Features
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+- 🔐 **Authentication**: Mock-based user authentication.
+- 📊 **Analytics Dashboard**: Dynamic charts and reports using Chart.js.
+- 🎨 **Dark/Light Theme**: Toggle between light and dark mode.
+- 🏠 **Sidebar Navigation**: Smooth navigation experience.
+- ⚡ **Optimized Performance**: Efficient state management with Redux-Saga.
+- 🚀 **Responsive UI**: Fully mobile-friendly and accessible.
 
-## Step 1: Start Metro
+## How to Run the Project Locally
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/aviaryan77/mini-dashboard.git
+   cd mini-dashboard
+   ```
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+2. **Install dependencies:**
+   ```sh
+   yarn
+   ```
 
-```sh
-# Using npm
-npm start
+3. **Start the development server:**
+   ```sh
+   yarn dev
+   ```
 
-# OR using Yarn
-yarn start
+4. **Open your browser and navigate to:**
+   ```
+   http://localhost:3000
+   ```
+
+5. **Login Credentials**
+   ```
+   email: user@example.com 
+   password: password123
+   ```
+
+
+## 🛠️ Technologies Used
+
+- **Next.js 15**: React framework for server-side rendering and static site generation.
+- **Redux & Redux-Saga**: State management with middleware for handling side effects.
+- **Chakra UI & Tailwind CSS**: Component-based styling with utility-first CSS.
+- **Formik & Yup**: Form handling with schema validation.
+- **Chart.js**: Data visualization library for analytics and reports.
+- **React-Error-Boundary**: Graceful error handling for components.
+- **Framer Motion**: Animations and transitions.
+
+
+
+## 📂 Folder Structure
+
 ```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+/mini-dashboard
+ ├── /components     # Reusable UI components
+ ├── /app            # Next.js pages
+ ├── /store          # Redux store and sagas
+ ├── /styles         # Global styles and themes
+ ├── /public         # Static assets
+ ├── /helpers        # Helper functions
+ ├── /types          # TypeScript Types
+ ├── README.md       # Project documentation
 ```
+## 🚀 Deployed URl
 
-### iOS
+[mini-dashboard](https://mini-dashboard-cyan.vercel.app/app)
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+---
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
