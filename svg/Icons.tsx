@@ -21,6 +21,8 @@ import Hamburger from './auth/HamburgerIcon.svg';
 import Help from './auth/HelpIcon.svg';
 import Image from './auth/ImageIcon.svg';
 import Info from './auth/InfoIcon.svg';
+import Eye from './auth/EyeIcon.svg';
+import EyeClose from './auth/EyeCloseIcon.svg';
 import Instagram from './socialMedia/InstagramIcon.svg';
 import Institute from './profile/InstituteIcon.svg';
 import LinkedIn from './socialMedia/LinkedInIcon.svg';
@@ -38,7 +40,7 @@ import RightArrowIcon from './auth/RightArrow.svg';
 import Twitter from './socialMedia/TwitterIcon.svg';
 import WhatsApp from './auth/WhatsAppIcon.svg';
 import YouTube from './socialMedia/YouTubeIcon.svg';
-import { COLORS, PressableBox } from '../theme';
+import {COLORS, PressableBox} from '../theme';
 
 export const MailIcon = ({color = COLORS.primary, ...rest}) => (
   <Email color={color} {...rest} />
@@ -50,6 +52,13 @@ export const WhatsAppIcon = ({color = COLORS.primary, ...rest}) => (
 
 export const InfoIcon = ({color = COLORS.primary, ...rest}) => (
   <Info color={color} {...rest} />
+);
+export const EyeCloseIcon = ({color = COLORS.primary, ...rest}) => (
+  <EyeClose color={color} {...rest} />
+);
+
+export const EyeIcon = ({color = COLORS.primary, ...rest}) => (
+  <Eye color={color} {...rest} />
 );
 
 export const PhoneIcon = ({color = COLORS.primary, ...rest}) => (
@@ -88,7 +97,7 @@ export const BookIcon = ({
 );
 
 export const DeleteIcon = ({
-  color ='#BD3D3D',
+  color = '#BD3D3D',
   onPress = () => {},
   ...rest
 }) => (
@@ -155,11 +164,7 @@ export const LockIcon = ({
   color = COLORS.primary,
   onPress = () => {},
   ...rest
-}) => (
-  <PressableBox onPress={onPress}>
-    <Lock color={color} {...rest} />
-  </PressableBox>
-);
+}) => <Lock color={color} {...rest} />;
 export const HamburgerIcon = ({
   color = COLORS.primary,
   onPress = () => {},

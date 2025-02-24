@@ -1,9 +1,7 @@
 // Auth Redux States
 import {takeEvery, fork, put, all, call, select} from 'redux-saga/effects';
 import {
-  SEND_OTP,
   LOGIN,
-  REFRESH_TOKEN,
   //PROFILE
   GET_PROFILE,
   UPDATE_PROFILE,
@@ -11,9 +9,7 @@ import {
 } from './actionTypes';
 
 import {
-  sendOtpSuccess,
   loginSuccess,
-  refreshTokenSuccess,
   getProfileSuccess,
   updateProfileSuccess,
   logoutSuccess,

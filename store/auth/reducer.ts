@@ -1,10 +1,6 @@
 import {
-  SEND_OTP,
-  SEND_OTP_SUCCESS,
   LOGIN,
   LOGIN_SUCCESS,
-  REFRESH_TOKEN,
-  REFRESH_TOKEN_SUCCESS,
 
   //PROFILE
   GET_PROFILE,
@@ -17,7 +13,7 @@ import {
   LOGOUT_SUCCESS,
   AUTH_ERROR,
 } from './actionTypes';
-import { AuthActionType } from './actions';
+import {AuthActionType} from './actions';
 
 interface AuthState {
   // Define your state properties here
@@ -25,8 +21,6 @@ interface AuthState {
   logoutLoading: boolean;
   loginLoading: boolean;
   refreshToken?: string | null;
-  refreshTokenLoading: boolean;
-  sendOtpLoading: boolean;
   updateProfileLoading: boolean;
   user?: any;
   error: any;
@@ -37,9 +31,7 @@ const initialState: AuthState = {
   accessToken: '',
   refreshToken: null,
   loginLoading: false,
-  refreshTokenLoading: false,
   user: null,
-  sendOtpLoading: false,
   logoutLoading: false,
   updateProfileLoading: false,
   error: null,
@@ -47,20 +39,6 @@ const initialState: AuthState = {
 
 const authReducer = (state = initialState, action: AuthActionType) => {
   switch (action.type) {
-    case SEND_OTP:
-      state = {
-        ...state,
-        sendOtpLoading: true,
-      };
-      break;
-
-    case SEND_OTP_SUCCESS:
-      state = {
-        ...state,
-        sendOtpLoading: false,
-      };
-      break;
-
     case LOGIN:
       state = {
         ...state,
@@ -74,21 +52,6 @@ const authReducer = (state = initialState, action: AuthActionType) => {
         loginLoading: false,
         accessToken: action.payload?.accessToken,
         user: action.payload?.user,
-      };
-      break;
-
-    case REFRESH_TOKEN:
-      state = {
-        ...state,
-        refreshTokenLoading: true,
-      };
-      break;
-
-    case REFRESH_TOKEN_SUCCESS:
-      state = {
-        ...state,
-        refreshTokenLoading: false,
-        accessToken: action.payload.accessToken,
       };
       break;
 
@@ -117,7 +80,7 @@ const authReducer = (state = initialState, action: AuthActionType) => {
       state = {
         ...state,
         user: action.payload?.user,
-        updateProfileLoading: false
+        updateProfileLoading: false,
       };
       break;
 
@@ -134,7 +97,6 @@ const authReducer = (state = initialState, action: AuthActionType) => {
         ...state,
         accessToken: '',
         refreshToken: null,
-        refreshTokenLoading: false,
         updateProfileLoading: false,
         user: null,
         logoutLoading: false,
@@ -145,9 +107,7 @@ const authReducer = (state = initialState, action: AuthActionType) => {
     case AUTH_ERROR:
       state = {
         ...state,
-        refreshTokenLoading: false,
         updateProfileLoading: false,
-        sendOtpLoading: false,
         loginLoading: false,
         logoutLoading: false,
         error: action?.payload,
@@ -155,7 +115,7 @@ const authReducer = (state = initialState, action: AuthActionType) => {
       break;
 
     default:
-      state = { ...state };
+      state = {...state};
       break;
   }
   return state;

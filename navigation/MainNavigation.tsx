@@ -1,15 +1,18 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from './RootNavigation';
-import AuthStack from './AuthStack';
-import AppStack from './AppStack';
+import {useAppSelector} from '../store/ReduxHook';
+import {NavigationContainer} from '@react-navigation/native';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
+import AppStack from './AppStack';
+import AuthStack from './AuthStack';
+
 const MainNavigation = () => {
+  const {accessToken} = useAppSelector(s => s.auth);
   return (
     <NavigationContainer ref={navigationRef}>
       <BottomSheetModalProvider>
-        {true ? <AuthStack /> : <AppStack />}
+        {accessToken ? <AppStack /> : <AuthStack />}
       </BottomSheetModalProvider>
     </NavigationContainer>
   );

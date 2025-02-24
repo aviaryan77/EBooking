@@ -1,11 +1,7 @@
-import { PayloadType, UserType } from '../../types';
+import {PayloadType, UserType} from '../../types';
 import {
-  SEND_OTP,
-  SEND_OTP_SUCCESS,
   LOGIN,
   LOGIN_SUCCESS,
-  REFRESH_TOKEN,
-  REFRESH_TOKEN_SUCCESS,
 
   //PROFILE
   GET_PROFILE,
@@ -17,24 +13,8 @@ import {
   AUTH_ERROR,
 } from './actionTypes';
 
-
-
-export const sendOtp = (
-  data: PayloadType<{ phone?: string } | { email?: string }>
-) => {
-  return {
-    type: SEND_OTP,
-    payload: data,
-  };
-};
-export const sendOtpSuccess = (data: PayloadType) => {
-  return {
-    type: SEND_OTP_SUCCESS,
-    payload: data,
-  };
-};
 export const login = (
-  data: PayloadType<{ phone?: string; email?: string; password: string }>
+  data: PayloadType<{email?: string; password: string}>,
 ) => {
   return {
     type: LOGIN,
@@ -45,18 +25,6 @@ export const loginSuccess = (data: PayloadType) => {
   return {
     type: LOGIN_SUCCESS,
     payload: data,
-  };
-};
-export const refreshToken = (data: PayloadType) => {
-  return {
-    type: REFRESH_TOKEN,
-    payload: data,
-  };
-};
-export const refreshTokenSuccess = (data: string) => {
-  return {
-    type: REFRESH_TOKEN_SUCCESS,
-    payload: { accessToken: data },
   };
 };
 
@@ -112,9 +80,7 @@ export const authError = (error: any) => {
 
 // TYPESCRIPT ACTION TYPES
 export type AuthActionType =
-  | { type: typeof SEND_OTP; payload: PayloadType }
-  | { type: typeof SEND_OTP_SUCCESS; payload: PayloadType }
-  | { type: typeof LOGIN; payload: PayloadType }
+  | {type: typeof LOGIN; payload: PayloadType}
   | {
       type: typeof LOGIN_SUCCESS;
       payload: {
@@ -122,17 +88,15 @@ export type AuthActionType =
         user: UserType;
       };
     }
-  | { type: typeof REFRESH_TOKEN; payload: PayloadType }
-  | { type: typeof REFRESH_TOKEN_SUCCESS; payload: any }
-  | { type: typeof GET_PROFILE; payload: PayloadType }
-  | { type: typeof GET_PROFILE_SUCCESS; payload: PayloadType }
-  | { type: typeof UPDATE_PROFILE; payload: PayloadType }
+  | {type: typeof GET_PROFILE; payload: PayloadType}
+  | {type: typeof GET_PROFILE_SUCCESS; payload: PayloadType}
+  | {type: typeof UPDATE_PROFILE; payload: PayloadType}
   | {
       type: typeof UPDATE_PROFILE_SUCCESS;
       payload: {
         user: UserType;
       };
     }
-  | { type: typeof LOGOUT; payload: PayloadType }
-  | { type: typeof LOGOUT_SUCCESS; payload: PayloadType }
-  | { type: typeof AUTH_ERROR; payload: PayloadType };
+  | {type: typeof LOGOUT; payload: PayloadType}
+  | {type: typeof LOGOUT_SUCCESS; payload: PayloadType}
+  | {type: typeof AUTH_ERROR; payload: PayloadType};

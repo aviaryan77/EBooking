@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   Screen,
@@ -10,64 +10,57 @@ import {
 } from '../../theme';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {MailIcon, PhoneIcon, RightArrow} from '../../svg/Icons';
+import {
+  EyeCloseIcon,
+  EyeIcon,
+  LockIcon,
+  MailIcon,
+  RightArrow,
+} from '../../svg/Icons';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import Log from '../../services/Log';
-import {sendOtp, } from '../../store/actions';
-import {RootState} from '../../types';
+import {login} from '../../store/actions';
 import {Linking} from 'react-native';
+import {useAppSelector} from '../../store/ReduxHook';
 
 const SigninScreen = ({route, navigation}: any) => {
   const dispatch = useDispatch();
-  const {sendOtpLoading, } = useSelector((state: RootState) => state.auth);
-
-  const {hasPhoneInput = true, role} = route?.params || {};
+  const {loginLoading} = useAppSelector(s => s.auth);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const validationSchema = yup.object().shape({
-    email:  yup.string().email('Invalid email'),
-    password:  yup.string().required('Password is required'),
+    email: yup.string().email('Invalid email'),
+    password: yup.string().required('Password is required'),
   });
 
-  const onRequestOtp = (values: {
-    email: string;
-    isPhoneInputVisible: boolean;
-    phone: string;
-  }) => {
+  const onLogin = (values: {email: string; password: string}) => {
     dispatch(
-      sendOtp({
+      login({
         data: {
-          ...(values.isPhoneInputVisible
-            ? {
-                phone: values.phone,
-              }
-            : {email: values.email.toLowerCase()}),
+          email: values.email.toLowerCase(),
+
+          password: values.password,
         },
+
         callback: cb => {
-          navigation.navigate('OtpScreen', {
-            email: values.email,
-            phone: values.phone,
-            hasPhoneInput: values.isPhoneInputVisible,
-            role: role,
-          });
+          // navigation.navigate('HomeScreen', {
+          //   email: values.email,
+          // });
         },
       }),
     );
   };
 
-  
-
   return (
     <Screen pt={40} px={16}>
       <Formik
         initialValues={{
-          isPhoneInputVisible: hasPhoneInput,
           email: '',
-          phone: '',
+          password: '',
         }}
-        onSubmit={(values)=>{
-           onRequestOtp(values)
+        onSubmit={values => {
+          onLogin(values);
         }}
         validationSchema={validationSchema}>
         {({
@@ -86,65 +79,57 @@ const SigninScreen = ({route, navigation}: any) => {
               <VStack>
                 <Text variant="header">Sign In</Text>
                 <Text mt={8} variant="regular">
-                  {values.isPhoneInputVisible
-                    ? `Please Enter your 10 digit mobile number`
-                    : 'Please Enter your Email address'}
+                  {'Login now to find whats happening around you'}
                 </Text>
-                {values.isPhoneInputVisible ? (
-                  <TextInput
-                    containerStyle={{mt: 20}}
-                    leftIcon={<PhoneIcon />}
-                    dataDetectorTypes={['phoneNumber']}
-                    textContentType="telephoneNumber"
-                    placeholder="Enter Mobile Number "
-                    onChangeText={handleChange('phone')}
-                    onBlur={handleBlur('phone')}
-                    value={values.phone}
-                    keyboardType="phone-pad"
-                    autoComplete="tel"
-                    autoFocus={!!values.isPhoneInputVisible}
-                    returnKeyType="done"
-                    returnKeyLabel="done"
-                    onSubmitEditing={() => handleSubmit()}
-                  />
-                ) : (
-                  <TextInput
-                    containerStyle={{mt: 20}}
-                    leftIcon={<MailIcon />}
-                    textContentType="emailAddress"
-                    returnKeyType="done"
-                    returnKeyLabel="done"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    placeholder="Enter Email Address"
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email?.toLowerCase()}
-                    keyboardType="email-address"
-                    inputMode="email"
-                    onSubmitEditing={() => handleSubmit()}
-                    autoFocus={!values.isPhoneInputVisible}
-                  />
-                )}
 
-                <Text mt={16} variant="regular">
-                  or{' '}
-                  <Text
-                    variant="medium"
-                    color={COLORS.primary}
-                    onPress={() => {
-                      // setErrors({});
-                      resetForm();
-                      setFieldValue(
-                        'isPhoneInputVisible',
-                        !values.isPhoneInputVisible,
-                      );
-                    }}>
-                    {values.isPhoneInputVisible
-                      ? `Login via Email`
-                      : `Login via Mobile No.`}
-                  </Text>
-                </Text>
+                <TextInput
+                  containerStyle={{mt: 20}}
+                  leftIcon={<MailIcon />}
+                  textContentType="emailAddress"
+                  returnKeyType="done"
+                  returnKeyLabel="done"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                  placeholder="Enter Email Address"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email?.toLowerCase()}
+                  keyboardType="email-address"
+                  inputMode="email"
+                  onSubmitEditing={() => handleSubmit()}
+                  autoFocus={true}
+                />
+                <TextInput
+                  containerStyle={{mt: 20}}
+                  leftIcon={
+                    <LockIcon height={24} width={24} color={COLORS.primary} />
+                  }
+                  rightIcon={
+                    isPasswordVisible ? (
+                      <EyeIcon
+                        height={24}
+                        width={24}
+                        color={COLORS.primary}
+                        onPress={() => setIsPasswordVisible(false)}
+                      />
+                    ) : (
+                      <EyeCloseIcon
+                        height={24}
+                        width={24}
+                        color={COLORS.primary}
+                        onPress={() => setIsPasswordVisible(true)}
+                      />
+                    )
+                  }
+                  textContentType="password"
+                  returnKeyType="done"
+                  returnKeyLabel="done"
+                  secureTextEntry={isPasswordVisible ? false : true}
+                  placeholder="Enter Password"
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                />
               </VStack>
               <VStack mb={20}>
                 <ErrorInfoBox
@@ -152,16 +137,24 @@ const SigninScreen = ({route, navigation}: any) => {
                   message={errors.email}
                 />
                 <ErrorInfoBox
-                  visible={!!errors.phone && !!touched.phone}
-                  message={errors.phone}
+                  visible={!!errors.email && !!touched.email}
+                  message={errors.email}
                 />
+
                 <Text mt={16} variant="regular">
-                  By tapping ‘Request OTP’ you agree to our{' '}
+                  Login Cred:
+                  {'\n'}
+                  Email: 'user@example.com'
+                  {'\n'}
+                  Password: password123
+                </Text>
+                <Text mt={16} variant="regular">
+                  By tapping ‘Log in’ you agree to our{' '}
                   <Text
                     variant="medium"
                     color={COLORS.primary}
                     onPress={() => {
-                      Linking.openURL('https://qtopia.in/terms/in-terms');
+                      Linking.openURL('https://google.com');
                     }}>
                     T&C
                   </Text>
@@ -171,9 +164,9 @@ const SigninScreen = ({route, navigation}: any) => {
                   mt={20}
                   onPress={() => handleSubmit()}
                   title="Log in"
-                  loading={sendOtpLoading }
+                  loading={loginLoading}
                   rightIcon={<RightArrow color="white" />}
-                  disabled={!!errors.email || !!errors.phone}
+                  disabled={!!errors.email || !!errors.password}
                 />
               </VStack>
             </VStack>
