@@ -1,17 +1,15 @@
 import React from 'react';
 
-import moment from 'moment';
-import {Button} from '../Restyle';
 import FlashBanner from './FlashBanner';
-import {Box, Text, W} from '../../Constants/Theme';
+import {Box, Text, W, Button} from '../../theme';
 import * as Animatable from 'react-native-animatable';
-import {currencyFormat} from '../../helperFunctions/eventHelper';
-import {userCurrency} from '../../helperFunctions/currencies';
-import {AuthContext} from '../../contexts/authContext';
+import {currencyFormat, userCurrency} from '../../helpers/eventHelper';
 
-const BookTicketBottomSheet = ({event, buttonLoading, onBookTicketPress}) => {
-  const {state} = React.useContext(AuthContext);
-  const userData = JSON.parse(state.userData);
+const BookTicketBottomSheet = ({
+  event,
+  buttonLoading,
+  onBookTicketPress,
+}: any) => {
   return (
     <Animatable.View
       duration={500}
@@ -46,7 +44,7 @@ const BookTicketBottomSheet = ({event, buttonLoading, onBookTicketPress}) => {
             variant="semiBold"
             color="primaryBlack"
             allowFontScaling={false}>
-            {userCurrency(userData)} {currencyFormat(event?.price ?? 0)}
+            {userCurrency} {currencyFormat(event?.price ?? 0)}
             <Text
               lineHeight={22}
               color="grey100"
@@ -64,8 +62,8 @@ const BookTicketBottomSheet = ({event, buttonLoading, onBookTicketPress}) => {
         </Box>
         <Button
           width={W * 0.4}
-          label="Book tickets"
-          isLoading={buttonLoading}
+          title="Book tickets"
+          loading={buttonLoading}
           onPress={onBookTicketPress}
         />
       </Box>

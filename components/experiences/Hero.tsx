@@ -1,19 +1,19 @@
 import React, {useRef} from 'react';
 import {Animated} from 'react-native';
 
-import Down from '../../svg/new/down2';
-import {Center} from '../../components/Restyle';
-import {Box, Text, W} from '../../Constants/Theme';
+import {Center} from '../../theme';
+import {Box, Text, W} from '../../theme';
 import Svg, {Stop, Defs, Rect, LinearGradient} from 'react-native-svg';
 
-const Hero = ({event, bannerHeight}) => {
+const Hero = ({event, bannerHeight}:any) => {
   const IMAGE_WIDTH = W * 0.92;
-  const flatListRef = useRef();
+  const flatListRef = useRef(null);
   const scrollX = useRef(new Animated.Value(0)).current;
   const scrollA = useRef(new Animated.Value(0)).current;
 
   const OverLay = () => {
     return (
+      // @ts-ignore
       <Svg height="100%" width="100%" position="absolute">
         <Defs>
           <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
@@ -46,7 +46,7 @@ const Hero = ({event, bannerHeight}) => {
         scrollEventThrottle={16}
         decelerationRate={0.95}
         data={event?.gallery ?? []}
-        keyExtractor={(item, index) => index}
+        keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           paddingRight: event?.gallery?.length === 1 ? 10 : 50,
@@ -63,6 +63,7 @@ const Hero = ({event, bannerHeight}) => {
           });
           return (
             <Animated.View
+              // @ts-ignore
               width={W}
               style={{
                 alignSelf: 'center',

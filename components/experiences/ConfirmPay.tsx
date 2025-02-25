@@ -1,17 +1,14 @@
 import React, {useEffect, useRef} from 'react';
 
-import {Box, Text, W} from '../../Constants/Theme';
+import {Box, Text, W} from '../../theme';
 import * as Animatable from 'react-native-animatable';
-import {Button, Center} from '../../components/Restyle';
-import {currencyFormat} from '../../helperFunctions/eventHelper';
-import { analytics } from '../../configs/analytics';
-import { userCurrency } from '../../helperFunctions/currencies';
-import { AuthContext } from '../../contexts/authContext';
+import {Button, } from'../../theme';
+import {currencyFormat, userCurrency} from '../../helpers/eventHelper';
 
-const ConfirmPay = ({totalAmount, onConfirmPress, buttonLoading}) => {
-  const { state } = React.useContext(AuthContext);
-  const userData = JSON.parse(state.userData);
-  const ButtonContainer = ({visible}) => {
+const ConfirmPay = ({totalAmount, onConfirmPress, buttonLoading}:any) => {
+  const ButtonContainer = ({visible}:{
+    visible: boolean
+  }) => {
     if (!visible) return null;
     return (
       <Box
@@ -28,7 +25,7 @@ const ConfirmPay = ({totalAmount, onConfirmPress, buttonLoading}) => {
             variant="semiBold"
             color="primaryBlack"
             allowFontScaling={false}>
-            {userCurrency(userData)} {currencyFormat(totalAmount)}
+            {userCurrency} {currencyFormat(totalAmount)}
           </Text>
 
           <Text
@@ -41,12 +38,11 @@ const ConfirmPay = ({totalAmount, onConfirmPress, buttonLoading}) => {
         </Box>
         <Button
           width={W * 0.4}
-          label="Pay now"
+          title="Pay now"
           onPress={()=>{
             onConfirmPress();
-            analytics.track("Pay Now Clicked")
           }}
-          isLoading={buttonLoading}
+          loading={buttonLoading}
         />
       </Box>
     );

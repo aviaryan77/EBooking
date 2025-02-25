@@ -1,14 +1,12 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Pressable} from 'react-native';
-import moment from 'moment';
-// import {Box, Text, W} from '../../Constants/Theme';
-import {Animated, Image, View} from 'react-native';
-import Svg, {Stop, Defs, Rect, Line, LinearGradient} from 'react-native-svg';
+import React, {useState, useRef} from 'react';
+import {Pressable, Animated, Image} from 'react-native';
 
-import {Box, Text, W} from '../../theme';
-import {navigate} from '../../navigation/RootNavigation';
-import {currencyFormat} from '../../helpers/eventHelper';
+import moment from 'moment';
 import {EVENT_DATA} from './EVENT_DATA';
+import {Box, Text, W} from '../../theme';
+import {currencyFormat} from '../../helpers/eventHelper';
+import {navigate} from '../../navigation/RootNavigation';
+import Svg, {Stop, Defs, Rect, Line, LinearGradient} from 'react-native-svg';
 
 const EventEntry = ({visible}: any) => {
   if (!visible) return null;

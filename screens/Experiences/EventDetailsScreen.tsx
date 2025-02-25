@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Animated, Image, Linking, Platform, Pressable} from 'react-native';
 
 import moment from 'moment';
-import {Box, Text, W, H} from '../../Constants/Theme';
+import {Box, Text, W, H} from '../../theme';
 import * as Animatable from 'react-native-animatable';
 import {
   Hero,
@@ -11,11 +11,9 @@ import {
   DatePickerModal,
 } from '../../components/experiences';
 import HTML from 'react-native-render-html';
-import Collapsible from 'react-native-collapsible';
-import {Screen, ErrorHandlingModal, Center} from '../../components/Restyle';
+// import Collapsible from 'react-native-collapsible';
+import {Screen, ErrorHandlingModal, Center} from '../../theme';
 
-import Back from '../../svg/new/back';
-import RightIcon from '../../svg/HomeSetup/rightArrow.svg';
 import LanguageIcon from '../../svg/experiences/language.svg';
 import CapacityIcon from '../../svg/experiences/capacity.svg';
 import HeartFilled from '../../svg/experiences/heart_filled.svg';
@@ -23,21 +21,17 @@ import ShareOutline from '../../svg/experiences/share_outline.svg';
 import HeartOutline from '../../svg/experiences/heart_outline.svg';
 import LocationOutline from '../../svg/experiences/location_outline.svg';
 
-import {bookTicket} from '../../helperFunctions/Api';
-import CenteredSharedModal from '../../components/Shared/CenteredSharedModal';
-import {analytics} from '../../configs/analytics';
-import CommentSection from '../../components/experiences/EventsActions/CommentSection';
-import {AuthContext} from '../../contexts/authContext';
-import CommentBottomSheet from '../../components/experiences/EventsActions/CommentBottomSheet';
+// import {bookTicket} from '../../helperFunctions/Api';
+// import CenteredSharedModal from '../../components/Shared/CenteredSharedModal';
 export const BANNER_H = 270;
-import firestore from '@react-native-firebase/firestore';
-import EventActions from '../../components/experiences/EventsActions/EventAction';
-import ReturnLogo from '../../functions/returnLogo';
 
-import ViewShot from 'react-native-view-shot';
-import {ShareWhatsappModal} from '../../components/Refer';
 
-const EventDetailsScreen = ({route, navigation}) => {
+// import ViewShot from 'react-native-view-shot';
+// import {ShareWhatsappModal} from '../../components/Refer';
+import { BackIcon, BookIcon, ChevronRightIcon } from '../../svg/Icons';
+
+const EventDetailsScreen = ({route, navigation}
+  :any) => {
   let event = route?.params?.event;
   let redirect_link = event?.redirect_link;
 
@@ -47,23 +41,18 @@ const EventDetailsScreen = ({route, navigation}) => {
   let languages = event?.meta?.languages ?? [];
   let about = event?.meta?.aboutHost;
 
-  let headerRef = useRef();
-  let shareViewRef = useRef();
-  let shareCaptureRef = useRef();
-  const captureRef = useRef();
-  const shareWhatsappRef = useRef();
+  let headerRef = useRef(null);
+  let shareViewRef = useRef(null);
+  let shareCaptureRef = useRef(null);
+  const captureRef = useRef(null);
+  const shareWhatsappRef = useRef(null);
 
-  const aboutRef = useRef();
-  const shareRef = useRef();
-  const descriptionRef = useRef();
-  const commentRef = useRef();
-  const calendarRef = useRef(null);
-  const bookTicketErrorRef = useRef();
+  const aboutRef = useRef(null);
+  const shareRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const bookTicketErrorRef = useRef(null);
 
-  const {state} = React.useContext(AuthContext);
-  const userData = JSON.parse(state.userData);
 
-  const userId = userData && userData.user_id;
 
   const scrollA = useRef(new Animated.Value(0)).current;
   const [isExpectationCollapsed, setIsExpectationCollapsed] = useState(true);
@@ -72,11 +61,11 @@ const EventDetailsScreen = ({route, navigation}) => {
   const [infoTitles, setInfoTitles] = useState(Object?.keys(info)?.slice(0, 1));
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const isFloating = !!scrollA;
   const [isTransparent, setTransparent] = useState(isFloating);
   const [expectationContainerHeight, setExpectationContainerHeight] =
     useState();
 
-  const isFloating = !!scrollA;
 
   const onExpectationLoadMorePress = () => {
     if (info) {
@@ -85,23 +74,15 @@ const EventDetailsScreen = ({route, navigation}) => {
     }
   };
 
-  useEffect(() => {
-    if (route?.params?.openComment == true) {
-      setTimeout(() => {
-        commentRef?.current?.showBottom();
-      }, 400);
-    }
-  }, [route]);
 
-  const openCommentSection = () => {
-    commentRef?.current?.showBottom();
-  };
+ 
 
   useEffect(() => {
     if (!scrollA) return;
     const listenerId = scrollA.addListener(a => {
       if (isTransparent !== a.value < BANNER_H) {
         setTransparent(!isTransparent);
+        // @ts-ignore
         headerRef?.current?.flipInX(300);
       } else if (a.value == 0) {
         // shareViewRef?.current?.flipInX(300);
@@ -110,9 +91,7 @@ const EventDetailsScreen = ({route, navigation}) => {
     return () => scrollA.removeListener(listenerId);
   });
 
-  useEffect(() => {
-    analytics.track('On Event Page', {name: event.name});
-  }, []);
+ 
 
   const Header = () => {
     return (
@@ -124,7 +103,7 @@ const EventDetailsScreen = ({route, navigation}) => {
         flexDirection="row"
         alignItems="center"
         justifyContent="space-between">
-        <Back
+        <BackIcon
           width={28}
           height={28}
           marginRight={10}
@@ -149,7 +128,7 @@ const EventDetailsScreen = ({route, navigation}) => {
                 justifyContent: 'flex-end',
               }}
               onPress={captureAndShareScreenshot}>
-              <ReturnLogo type="shareOutline" width={24} height={24} />
+              <BookIcon type="shareOutline" width={24} height={24} />
               <Text
                 fontSize={16}
                 lineHeight={24}
@@ -219,7 +198,7 @@ const EventDetailsScreen = ({route, navigation}) => {
                 fontSize={14}>
                 See on Map
               </Text>
-              <RightIcon height={12} width={12} />
+              <ChevronRightIcon height={12} width={12} />
             </Box>
           </Pressable>
         )}
@@ -283,6 +262,7 @@ const EventDetailsScreen = ({route, navigation}) => {
         {event?.description?.length > 120 ? (
           <>
             <HTML
+            // @ts-ignore
               baseFontStyle={{fontFamily: 'Metropolis-Regular'}}
               tagsStyles={tagsStyles}
               source={{
@@ -296,6 +276,7 @@ const EventDetailsScreen = ({route, navigation}) => {
               lineHeight={20}
               variant="semiBold"
               textDecorationLine="underline"
+              // @ts-ignore
               onPress={() => descriptionRef?.current?.showBottom()}>
               Read more
             </Text>
@@ -401,6 +382,7 @@ const EventDetailsScreen = ({route, navigation}) => {
               lineHeight={20}
               variant="semiBold"
               textDecorationLine="underline"
+              // @ts-ignore
               onPress={() => descriptionRef?.current?.showBottom()}>
               Read more
             </Text>
@@ -449,7 +431,7 @@ const EventDetailsScreen = ({route, navigation}) => {
           my="m">
           What to expect
         </Text>
-        <Collapsible collapsed={isExpectationCollapsed} collapsedHeight={150}>
+        {/* <Collapsible collapsed={isExpectationCollapsed} collapsedHeight={150}> */}
           {infoTitles?.map(title => {
             return (
               <Box key={title} mb="s">
@@ -461,7 +443,7 @@ const EventDetailsScreen = ({route, navigation}) => {
                   mb="s">
                   {title}
                 </Text>
-                {info[title].map(bullet => {
+                {info[title].map((bullet:any) => {
                   return (
                     <Box key={bullet}>
                       <Box flexDirection="row" alignItems="flex-start">
@@ -489,7 +471,7 @@ const EventDetailsScreen = ({route, navigation}) => {
               </Box>
             );
           })}
-        </Collapsible>
+        {/* </Collapsible> */}
         {isExpectationCollapsed ? (
           <Text
             mt="m"
@@ -503,7 +485,7 @@ const EventDetailsScreen = ({route, navigation}) => {
       </Box>
     );
   };
-  const BenefitBullets = ({text, image}) => {
+  const BenefitBullets = ({text, image}:any) => {
     return (
       <Box flexDirection="row" alignItems="center" mt="l">
         <Center height={72} width={80} mr="l" overflow="hidden">
@@ -558,7 +540,6 @@ const EventDetailsScreen = ({route, navigation}) => {
     // calendarRef.current.showModal()
     // return null;
 
-    // analytics.track('Book Tickets Clicked', {name: event.name});
 
     // if (redirect_link) {
     //   Linking.openURL(redirect_link);
@@ -581,11 +562,13 @@ const EventDetailsScreen = ({route, navigation}) => {
         setIsButtonLoading(false);
       } else {
         setIsButtonLoading(false);
+        // @ts-ignore
         bookTicketErrorRef.current.showModal(res?.data?.detail);
       }
     } catch (error) {
       console.log('error', error)
       setIsButtonLoading(false);
+      // @ts-ignore
       bookTicketErrorRef.current.showModal(
         !!error ? JSON.stringify(error) : '',
       );
@@ -593,14 +576,13 @@ const EventDetailsScreen = ({route, navigation}) => {
   };
 
   const captureAndShareScreenshot = () => {
-    analytics.track('Share event click');
-    captureRef?.current?.capture()?.then(data => {
-      shareWhatsappRef.current.showShare({
-        message: `Did you check ${event.name} out on Splitkaro?`,
-        // message: `Did you check ${event.name} out on Splitkaro? [Link]`, // TODO with Link
-        base64: data,
-      });
-    });
+    // captureRef?.current?.capture()?.then(data => {
+    //   shareWhatsappRef.current.showShare({
+    //     message: `Did you check ${event.name} out on Splitkaro?`,
+    //     // message: `Did you check ${event.name} out on Splitkaro? [Link]`, // TODO with Link
+    //     base64: data,
+    //   });
+    // });
   };
 
   return (
@@ -614,7 +596,7 @@ const EventDetailsScreen = ({route, navigation}) => {
             {useNativeDriver: true},
           )}
           scrollEventThrottle={16}>
-          <ViewShot
+          {/* <ViewShot
             style={{backgroundColor: '#fff'}}
             ref={captureRef}
             options={{
@@ -622,28 +604,9 @@ const EventDetailsScreen = ({route, navigation}) => {
               format: 'jpg',
               quality: 0.9,
               result: 'base64',
-            }}>
+            }}> */}
             <Hero event={event} bannerHeight={BANNER_H} />
-            <Box marginTop={'m'}>
-              {event && (
-                <EventActions
-                  likedByYou={
-                    event?.stats?.likesByUser?.includes(userId) ? true : false
-                  }
-                  updateData={route?.params?.updateExperienceListing}
-                  openCommentSection={openCommentSection}
-                  increaseViewCount={true}
-                  viewCount={event?.stats?.views ? event?.stats?.views : 0}
-                  likeCount={event?.stats?.like > 0 ? event?.stats?.like : 0}
-                  eventId={event._id}
-                  userId={userId}
-                  commentCount={
-                    event?.stats?.comments?.length > 0
-                      ? event?.stats?.comments?.length
-                      : 0
-                  }></EventActions>
-              )}
-            </Box>
+            
             <AddressContainer />
             <TimeContainer />
             <Description />
@@ -651,7 +614,7 @@ const EventDetailsScreen = ({route, navigation}) => {
             <Organizer />
             <Capacity />
             <Languages />
-          </ViewShot>
+          {/* </ViewShot> */}
           <About />
           <Expectation />
           {/* <Benefits /> */}
@@ -674,6 +637,7 @@ const EventDetailsScreen = ({route, navigation}) => {
         <ReadMoreBottomSheet ref={descriptionRef}>
           <Box py="m" px="l" style={{paddingBottom: 50}}>
             <HTML
+            // @ts-ignore
               baseFontStyle={{fontFamily: 'Metropolis-Regular'}}
               tagsStyles={{
                 span: {
@@ -694,16 +658,12 @@ const EventDetailsScreen = ({route, navigation}) => {
           </Box>
         </ReadMoreBottomSheet>
 
-        <CommentBottomSheet ref={commentRef}>
-          <CommentSection
-            updateData={route?.params?.updateExperienceListing}
-            eventId={event._id}
-            userId={userId}></CommentSection>
-        </CommentBottomSheet>
+        
 
         <ReadMoreBottomSheet ref={aboutRef}>
           <Box py="m" px="l" style={{paddingBottom: 50}}>
             <HTML
+            // @ts-ignore
               baseFontStyle={{fontFamily: 'Metropolis-Regular'}}
               tagsStyles={{
                 span: {
@@ -724,19 +684,18 @@ const EventDetailsScreen = ({route, navigation}) => {
           onBookTicketPress={bookTicketHandler}
         />
         <ErrorHandlingModal
-          description="Something went wrong"
           ref={bookTicketErrorRef}
-          onPress={() => bookTicketErrorRef.current.hideModal()}
-          onClose={() => bookTicketErrorRef.current.hideModal()}
+          // @ts-ignore
+          description="Something went wrong"  onPress={() => bookTicketErrorRef.current.hideModal()}  onClose={() => bookTicketErrorRef.current.hideModal()}
         />
 
-        <CenteredSharedModal
+        {/* <CenteredSharedModal
           ref={shareRef}
           onOthersShare={() => {}}
           onWhatsappShare={() => {}}
-        />
+        /> */}
       </Screen>
-      <ShareWhatsappModal ref={shareWhatsappRef} />
+      {/* <ShareWhatsappModal ref={shareWhatsappRef} /> */}
     </>
   );
 };

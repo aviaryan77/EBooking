@@ -3,24 +3,24 @@ import {ScrollView, Image} from 'react-native';
 // import Image from 'react-native-scalable-image';
 
 import moment from 'moment';
-import Back from '../../svg/new/back';
-import {Box, Text, W} from '../../Constants/Theme';
-import {currencyFormat, sentenceCase} from '../../helperFunctions/eventHelper';
-import {ConfirmPay, PaymentBottomSheet} from '../../components/experiences';
-import {
+// import Back from '../../svg/new/back';
+import {Box, Text, W,
   Screen,
   AddFieldModal,
   ErrorHandlingModal,
-} from '../../components/Restyle';
 
-import {AuthContext} from '../../contexts/authContext';
+} from  '../../theme';
+import {currencyFormat, sentenceCase, userCurrency} from '../../helpers/eventHelper';
+import {ConfirmPay, 
+  
+} from '../../components/experiences';
 
-import {analytics} from '../../configs/analytics';
-import Log from '../../helperFunctions/Log';
-import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import { userCurrency } from '../../helperFunctions/currencies';
 
-const ConfirmDetailsScreen = ({route, navigation}) => {
+
+import { GorhomBottomSheetRef } from '../../theme/GorhomBottomSheet';
+import { BackIcon } from '../../svg/Icons';
+
+const ConfirmDetailsScreen = ({route, navigation}:any) => {
   const {event, orderData} = route.params ?? {};
   const {
     unit_price,
@@ -34,20 +34,18 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
   } = orderData?.amount_breakup;
   const quantities = orderData.quantities;
 
-  const errorRef = useRef();
-  const settleRef = useRef();
-  const mailErrorRef = useRef();
-  const couponErrorRef = useRef();
+  const errorRef = useRef(null);
+  const settleRef = useRef(null);
+  const mailErrorRef = useRef(null);
+  const couponErrorRef = useRef<GorhomBottomSheetRef>(null);
 
-  const {state} = React.useContext(AuthContext);
-  const userData = JSON.parse(state.userData);
 
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [couponFieldVisible, setCouponFieldVisible] = useState(false);
   const [isEditMailModalVisible, setIsEditMailModalVisible] = useState(false);
-  const [mailId, setMailId] = useState(userData?.email ?? 'example@gmail.com');
+  const [mailId, setMailId] = useState('example@gmail.com');
   const [tempMailValue, setTempMailValue] = useState(
-    userData?.email ?? 'example@gmail.com',
+     'example@gmail.com',
   );
   const [hasMailError, setHasMailError] = useState(false);
 
@@ -62,7 +60,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
         flexDirection="row"
         justifyContent="space-between">
         <Box flexDirection="row" alignItems="center">
-          <Back
+          <BackIcon
             width={28}
             height={28}
             marginRight={10}
@@ -78,11 +76,9 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
     );
   };
 
-  useEffect(() => {
-    analytics.track('On Confirm Details Page', {name: event.name});
-  }, []);
+ 
 
-  const SectionText = ({text}) => (
+  const SectionText = ({text}:{text:string}) => (
     <Box py="m">
       <Text variant="semiBold" fontSize={16} lineHeight={24}>
         {text}
@@ -95,7 +91,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
     editable,
     fieldName,
     visible = true,
-  }) => {
+  }:any) => {
     if (!visible) return null;
     return (
       <Box my="s" pb="s">
@@ -128,10 +124,10 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
     );
   };
 
-  const TotalTicket = ({visible}) => {
+  const TotalTicket = ({visible}:{visible:boolean}) => {
     if (!visible) return null;
 
-    var totalTicketCount = quantities.reduce(function (prev, cur) {
+    var totalTicketCount = quantities.reduce(function (prev:number, cur:any) {
       return prev + cur.quantity;
     }, 0);
 
@@ -139,8 +135,8 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
       <Box>
         <Box>
           {quantities
-            ?.filter(type => type?.quantity !== 0)
-            .map((type, index) => {
+            ?.filter((type:any) => type?.quantity !== 0)
+            .map((type:any, index:number) => {
               return (
                 <Box
                   mt="s"
@@ -163,7 +159,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
                     color="grey200"
                     lineHeight={24}
                     allowFontScaling={false}>
-                    {`${userCurrency(userData)}${currencyFormat(
+                    {`${userCurrency}${currencyFormat(
                       type?.quantity *
                         event?.price_breakup[type?.unit_type]?.unit_price,
                     )}`}
@@ -173,7 +169,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
             })}
         </Box>
 
-        {quantities?.filter(type => type?.quantity !== 0)?.length > 1 && (
+        {quantities?.filter((type:any) => type?.quantity !== 0)?.length > 1 && (
           <Box
             mt="s"
             alignItems="center"
@@ -194,7 +190,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
               lineHeight={20}
               variant="medium"
               color="primaryBlack">
-              {userCurrency(userData)}{currencyFormat(total_price)}
+              {userCurrency}{currencyFormat(total_price)}
             </Text>
           </Box>
         )}
@@ -202,7 +198,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
     );
   };
 
-  const isValidEmail = email => {
+  const isValidEmail = (email:string) => {
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     if (email.match(regex)) return true;
@@ -221,11 +217,13 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
       setIsEditMailModalVisible(false);
     } else {
       setHasMailError(true);
+      // @ts-ignore
       mailErrorRef.current.showModal();
     }
   };
 
   const payButtonHandler = async () => {
+     // @ts-ignore
     settleRef.current.showBottom();
   };
 
@@ -305,7 +303,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
                 variant="medium"
                 color="darkGreen"
                 allowFontScaling={false}>
-                you saved {userCurrency(userData)}{currencyFormat(total_discount)}
+                you saved {userCurrency}{currencyFormat(total_discount)}
               </Text>
             </Box>
 
@@ -318,7 +316,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
                 color="grey200"
                 lineHeight={24}
                 allowFontScaling={false}>
-                {userCurrency(userData)}{total_tax_breakup?.value}
+                {userCurrency}{total_tax_breakup?.value}
               </Text>
             </Box>
 
@@ -347,7 +345,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
                 color="grey200"
                 lineHeight={24}
                 allowFontScaling={false}>
-                {`${userCurrency(userData)}${convenience_fee ? convenience_fee.toFixed(2) : '200.00'}`}
+                {`${userCurrency}${convenience_fee ? convenience_fee.toFixed(2) : '200.00'}`}
               </Text>
             </Box>
 
@@ -360,7 +358,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
                 variant="bold"
                 color="grey100"
                 allowFontScaling={false}>
-                {`${userCurrency(userData)}${currencyFormat(final_price)}`}
+                {`${userCurrency}${currencyFormat(final_price)}`}
               </Text>
             </Box>
             {total_discount > 0 && (
@@ -371,7 +369,7 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
                   fontSize={12}
                   lineHeight={24}>
                   Congrats! You’re saving a total of{' '}
-                  {userCurrency(userData)}{''}
+                  {userCurrency}{''}
                   {currencyFormat(total_discount)} with Splitkaro
                 </Text>
               </Box>
@@ -445,37 +443,36 @@ const ConfirmDetailsScreen = ({route, navigation}) => {
         totalAmount={final_price}
         onConfirmPress={payButtonHandler}
       />
-      <BottomSheetModalProvider>
+      {/* <BottomSheetModalProvider>
         <PaymentBottomSheet
           ref={settleRef}
+          //@ts-ignore
           event={event}
           amount={final_price}
           orderId={orderData?._id}
           user_details={[
             {
               email: mailId,
-              phone: userData?.phone, // optional
+              phone: '9431210691', // optional
             },
           ]}
           callback={() => {}}
         />
-     </BottomSheetModalProvider>
+     </BottomSheetModalProvider> */}
       <ErrorHandlingModal
         ref={couponErrorRef}
-        description="Invalid Coupon code"
-        onPress={() => couponErrorRef.current.hideModal()}
-        onClose={() => couponErrorRef.current.hideModal()}
+        //@ts-ignore
+        description="Invalid Coupon code"        onPress={() => couponErrorRef.current.hideModal()}        onClose={() => couponErrorRef.current.hideModal()}
       />
       <ErrorHandlingModal
         ref={mailErrorRef}
-        description="Invalid Email Address"
-        onPress={() => mailErrorRef.current.hideModal()}
-        onClose={() => mailErrorRef.current.hideModal()}
+        //@ts-ignore
+        description="Invalid Email Address"    onPress={() => mailErrorRef.current.hideModal()}        onClose={() => mailErrorRef.current.hideModal()}
       />
       <ErrorHandlingModal
         ref={errorRef}
-        onPress={() => errorRef.current.hideModal()}
-        onClose={() => errorRef.current.hideModal()}
+        //@ts-ignore
+        onPress={() => errorRef.current.hideModal()}  onClose={() => errorRef.current.hideModal()}
       />
     </Screen>
   );

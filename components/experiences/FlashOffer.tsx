@@ -1,12 +1,11 @@
 import React from 'react';
 
-import {Box, Text, W} from '../../Constants/Theme';
-import ReturnLogo from '../../functions/returnLogo';
-import {currencyFormat} from '../../helperFunctions/eventHelper';
+import {Box, Text, W} from '../../theme';
+import {currencyFormat} from '../../helpers/eventHelper';
 import TickIcon from '../../svg/experiences/tick.svg';
 import PercentStarIcon from '../../svg/experiences/percentStar.svg';
 
-const FlashOffer = ({offerResponse, isOfferApplied, visible = true}) => {
+const FlashOffer = ({offerResponse, isOfferApplied, visible = true}:any) => {
   if (!visible) return null;
   return (
     <Box

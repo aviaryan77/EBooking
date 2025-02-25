@@ -15,7 +15,7 @@ import DottedLoader from './DottedLoader';
 export const H = Dimensions.get('window').height;
 export const W = Dimensions.get('window').width;
 
-import {FlexProps, LayoutProps} from './themeTypes';
+import {BoxProps, FlexProps, LayoutProps} from './themeTypes';
 import {useNavigation} from '@react-navigation/native';
 import {BackIcon, CloseIcon, InfoIcon, } from '../svg/Icons';
 import { goBack, navigate, navigationRef } from '../navigation/RootNavigation';
@@ -84,6 +84,44 @@ export const Screen = ({
   );
 };
 
+
+export const Header: FC<HeaderProps> = ({
+  title,
+  onBackPress,
+  rightElement = null,
+  ...rest
+}) => {
+  const navigation = useNavigation();
+  return (
+    <Box
+      px={16}
+      bg="primaryWhite"
+      alignItems="center"
+      flexDirection="row"
+      justifyContent="space-between"
+      {...rest}>
+      <Box flexDirection="row" alignItems="center">
+        <BackIcon
+          width={28}
+          height={28}
+          marginRight={8}
+          onPress={() => (onBackPress ? onBackPress() : navigation.goBack())}
+        />
+
+        <Text
+          fontSize={18}
+          lineHeight={24}
+          variant={'semiBold'}
+          paddingVertical={10}
+          color={'primaryBlack'}>
+          {title}
+        </Text>
+      </Box>
+      {rightElement}
+    </Box>
+  );
+};
+
 export const Flex: React.FC<
   FlexProps & LayoutProps & {children?: React.ReactNode}
 > = ({children, w = '100%', align = 'center', flexDir = 'row', ...args}) => {
@@ -137,6 +175,8 @@ interface HeaderProps extends LayoutProps {
   title?: string;
   leftComponent?: any;
   rightComponent?: any;
+  onBackPress?: any;
+  rightElement?: any;
 }
 export const HeaderWithBackButton: FC<HeaderProps> = ({
   title = '',

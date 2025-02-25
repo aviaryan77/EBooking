@@ -2,15 +2,10 @@ import React, {useState, useEffect, useRef} from 'react';
 import {FlatList} from 'react-native';
 
 import FlashOffer from './FlashOffer';
-import {Button} from '../../components/Restyle';
-import {Box, Text, W} from '../../Constants/Theme';
+import {Box, Button, Text, W} from '../../theme';
 import * as Animatable from 'react-native-animatable';
-import {currencyFormat} from '../../helperFunctions/eventHelper';
+import {currencyFormat, userCurrency} from '../../helpers/eventHelper';
 
-import Log from '../../helperFunctions/Log';
-import { analytics } from '../../configs/analytics';
-import { userCurrency } from '../../helperFunctions/currencies';
-import { AuthContext } from '../../contexts/authContext';
 
 const TicketCounter = ({
   event,
@@ -20,13 +15,12 @@ const TicketCounter = ({
   offerAppliedId,
   isDataFetching,
   totalMemberCount,
-}) => {
-  const flatListRef = useRef();
-  const { state } = React.useContext(AuthContext);
-  const userData = JSON.parse(state.userData);
+}:any) => {
+  const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
     let matchedIdIndex = event?.bulk_booking_offers?.findIndex(
+      // @ts-ignore
       item => item.id == offerAppliedId,
     );
 
@@ -38,7 +32,9 @@ const TicketCounter = ({
     }
   }, [offerAppliedId]);
 
-  const ConfirmContainer = ({visible}) => {
+  const ConfirmContainer = ({visible}:{
+    visible: boolean
+  }) => {
     if (!visible) return null;
     return (
       <>
@@ -66,7 +62,7 @@ const TicketCounter = ({
                 lineHeight={30}
                 color="primaryBlack"
                 allowFontScaling={false}>
-                {userCurrency(userData)}{currencyFormat(offerResponse?.final_price)}
+                {userCurrency}{currencyFormat(offerResponse?.final_price)}
               </Text>
 
               <Text
@@ -74,25 +70,27 @@ const TicketCounter = ({
                 color="primaryBlue"
                 textDecorationLine="line-through"
                 allowFontScaling={false}>
-                 {userCurrency(userData)}{currencyFormat(offerResponse?.total_price)}
+                 {userCurrency}{currencyFormat(offerResponse?.total_price)}
               </Text>
             </Box>
           )}
           <Button
             width={W * 0.5}
-            label="Confirm and pay"
+            title="Confirm and pay"
             onPress={()=>{
               onConfirmPress();
-              analytics.track("Confirm and Pay click",{name:event.name})
             }}
-            isLoading={buttonLoading || isDataFetching}
+            loading={buttonLoading || isDataFetching}
           />
         </Box>
       </>
     );
   };
 
-  const renderOfferCard = ({item, index}) => {
+  const renderOfferCard = ({item, index}:{
+    item: any
+    index: number
+  }) => {
     const selectedCard = offerAppliedId == item?.id;
     return (
       <Box
@@ -141,7 +139,7 @@ const TicketCounter = ({
           visible={true}
           offerResponse={offerResponse}
           isOfferApplied={event?.bulk_booking_offers?.some(
-            item => item.id == offerAppliedId,
+            (item:any) => item.id == offerAppliedId,
           )}
         />
 
@@ -149,7 +147,7 @@ const TicketCounter = ({
           horizontal
           ref={flatListRef}
           data={event?.bulk_booking_offers ?? []}
-          key={item => item.id}
+          keyExtractor={item => item?.id?.toString()}
           renderItem={renderOfferCard}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{

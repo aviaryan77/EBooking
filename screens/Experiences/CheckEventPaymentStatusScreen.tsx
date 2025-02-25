@@ -5,22 +5,18 @@ import {
   Screen,
   ErrorHandlingModal,
   HeaderWithBackButton,
-} from '../../components/Restyle';
+} from '../../theme';
 
-import {H, W, Text, Box} from '../../Constants/Theme';
+import {H, W, Text, Box} from '../../theme';
 import {StackActions} from '@react-navigation/native';
-import {AuthContext} from '../../contexts/authContext';
-import {WalletContext} from '../../contexts/walletContext';
-import PaymentStatus from '../../paymentcomponents/paymentStatus';
+// import PaymentStatus from '../../paymentcomponents/paymentStatus';
 
-import {analytics} from '../../configs/analytics';
-import {checkOrderStatus} from '../../helperFunctions/Api';
-import {useSplitkaroCashAtom} from '../../atom/useScratchCard';
+// import {checkOrderStatus} from '../../helperFunctions/Api';
 
 const popAction = StackActions.pop(1);
 const popAction2 = StackActions.pop(2);
 
-const CheckEventPaymentStatusScreen = ({navigation, route}) => {
+const CheckEventPaymentStatusScreen = ({navigation, route}:any) => {
   const {
     event,
     amount,
@@ -29,21 +25,15 @@ const CheckEventPaymentStatusScreen = ({navigation, route}) => {
     paymentapp = 'upi',
   } = route.params ?? {};
 
-  const {state} = useContext(AuthContext);
-  const {token: userToken} = JSON.parse(state.userData);
-  const {walletState, updateBalance, updateTransactions, resetTransactions} =
-    useContext(WalletContext);
-  const [splitkaroCash, updateSplitkaroCash] = useSplitkaroCashAtom();
+
 
   const [paymentMessage, setPaymentMessage] = useState('');
   const [paymentStage, setPaymentStage] = useState('inprocess'); // inprocess, server, success, failure
 
-  const apiErrorRef = useRef();
+  const apiErrorRef = useRef(null);
 
   useEffect(() => {
     if (!!upiLink) {
-      console.log(`upiLink`, upiLink);
-      analytics.track('Payment link generated');
       var link = upiLink;
       if (Platform.OS == 'ios' && link) {
         if (paymentapp == 'phonepe') {
@@ -81,7 +71,6 @@ const CheckEventPaymentStatusScreen = ({navigation, route}) => {
         console.log(`setTimeout`);
         transactionStatus();
       }, 8000);
-      analytics.track('Event payment status check started');
     }
   }, [upiLink]);
 
@@ -91,59 +80,38 @@ const CheckEventPaymentStatusScreen = ({navigation, route}) => {
     setTimeout(async () => {
       transactionCount++;
       try {
-        const settlementStatus = await checkOrderStatus({orderId});
-        if (settlementStatus?.status === 200) {
-          if (settlementStatus?.data?.status == 'failure') {
-            resetTransactions();
-            updateTransactions(true);
-            setTimeout(() => {
-              setPaymentStage('failure');
-            }, 1000);
-            analytics.track('paid money failure', {
-              amount: amount,
-              orderId: orderId,
-            });
-          } else if (settlementStatus?.data?.status == 'success') {
-            setPaymentStage('success');
-            updateBalance();
-            updateSplitkaroCash();
-            resetTransactions();
-            updateTransactions(true);
-            navigation.navigate('BookingConfirmationScreen', {orderId});
-            analytics.track('Money paid successfully', {
-              amount: amount,
-              orderId: orderId,
-            });
-          } else {
-            // pending
-            if (transactionCount < 10) {
-              transactionStatus();
-            } else {
-              resetTransactions();
-              updateTransactions(true);
-              setPaymentStage('server');
-              setPaymentMessage('Transaction Pending');
-              analytics.track('event payment pending', {
-                amount: amount,
-                orderId: orderId,
-              });
-            }
-          }
-        } else {
-          apiErrorRef?.current?.showModal(res?.data?.detail);
-        }
+        // const settlementStatus = await checkOrderStatus({orderId});
+        // if (settlementStatus?.status === 200) {
+        //   if (settlementStatus?.data?.status == 'failure') {
+        //     setTimeout(() => {
+        //       setPaymentStage('failure');
+        //     }, 1000);
+           
+        //   } else if (settlementStatus?.data?.status == 'success') {
+        //     setPaymentStage('success');
+        //     navigation.navigate('BookingConfirmationScreen', {orderId});
+           
+        //   } else {
+        //     // pending
+        //     if (transactionCount < 10) {
+        //       transactionStatus();
+        //     } else {
+        //       setPaymentStage('server');
+        //       setPaymentMessage('Transaction Pending');
+             
+        //     }
+        //   }
+        // } else {
+        //   //@ts-ignore
+        //   apiErrorRef?.current?.showModal(res?.data?.detail);
+        // }
       } catch (error) {
         setTimeout(() => {
-          resetTransactions();
-          updateTransactions(true);
           setPaymentStage('server');
+          //@ts-ignore
           apiErrorRef?.current?.showModal(!!error ? JSON.stringify(error) : '');
           setPaymentMessage('Something went wrong');
-          analytics.track('Add money server error', {
-            amount: amount,
-            orderId: orderId,
-            error: JSON.stringify(error),
-          });
+          
         }, 1000);
       }
     }, 2000);
@@ -159,7 +127,7 @@ const CheckEventPaymentStatusScreen = ({navigation, route}) => {
         <Center>
           {paymentStage == 'inprocess' && (
             <Center>
-              <PaymentStatus height={300} width={300} type={paymentStage} />
+              {/* <PaymentStatus height={300} width={300} type={paymentStage} /> */}
               <Text
                 fontSize={20}
                 lineHeight={24}
@@ -172,7 +140,7 @@ const CheckEventPaymentStatusScreen = ({navigation, route}) => {
 
           {paymentStage == 'failure' && (
             <Center mt="xl">
-              <PaymentStatus height={150} width={150} type={paymentStage} />
+              {/* <PaymentStatus height={150} width={150} type={paymentStage} /> */}
               <Text fontSize={20} lineHeight={24} variant="semiBold">
                 Transaction Failed
               </Text>
@@ -181,7 +149,7 @@ const CheckEventPaymentStatusScreen = ({navigation, route}) => {
 
           {paymentStage == 'success' && (
             <Center mt="xl">
-              <PaymentStatus height={150} width={150} type={paymentStage} />
+              {/* <PaymentStatus height={150} width={150} type={paymentStage} /> */}
               <Text fontSize={20} lineHeight={24} variant="semiBold">
                 Payment Done
               </Text>
@@ -190,7 +158,7 @@ const CheckEventPaymentStatusScreen = ({navigation, route}) => {
 
           {paymentStage == 'server' && (
             <Center mt="xl">
-              <PaymentStatus height={150} width={150} type={paymentStage} />
+              {/* <PaymentStatus height={150} width={150} type={paymentStage} /> */}
               <Text fontSize={20} lineHeight={24} variant="semiBold">
                 {paymentMessage}
               </Text>
@@ -215,10 +183,8 @@ const CheckEventPaymentStatusScreen = ({navigation, route}) => {
 
       <ErrorHandlingModal
         ref={apiErrorRef}
-        onPress={() => {
-          apiErrorRef.current.hideModal();
-        }}
-        onClose={() => apiErrorRef.current.hideModal()}
+        // @ts-ignore
+        onPress={() =>  apiErrorRef.current.hideModal()} onClose={() => apiErrorRef.current.hideModal()}
       />
     </Screen>
   );

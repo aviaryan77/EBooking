@@ -25,3 +25,5 @@ export const sentenceCase = (str) =>
 }
 
 export const memberCountSum = obj => Object?.values(obj)?.reduce((a, b) => a + b, 0); //it will sum an object like {single:2, female:4}
+
+export const userCurrency = '₹'

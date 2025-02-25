@@ -1,9 +1,10 @@
 import React from 'react';
 
-import {Box, Text, W} from '../../Constants/Theme';
-import ReturnLogo from '../../functions/returnLogo';
+import {Box, Text, W} from '../../theme';
+// import ReturnLogo from '../../functions/returnLogo';
+import PercentIcon from '../../svg/experiences/percent.svg';
 
-const FlashBanner = ({event = true, visible}) => {
+const FlashBanner = ({event = true, visible}:any) => {
   if (!visible) return null;
   return (
     <Box
@@ -17,7 +18,7 @@ const FlashBanner = ({event = true, visible}) => {
       <Box flexDirection="row" alignItems="center">
         <Box width={45} height="100%" position="relative">
           <Box top={-24} borderRadius={30} position="absolute" bg={'green100'}>
-            <ReturnLogo width={40} height={40} type="percent" />
+            <PercentIcon width={40} height={40} type="percent" />
           </Box>
         </Box>
 

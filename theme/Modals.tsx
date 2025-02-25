@@ -7,9 +7,9 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import {Flex, PressableBox, VStack, W} from './containers';
+import {Box, Flex, H, PressableBox, VStack, W} from './containers';
 
-import {COLORS, Text} from '.';
+import {Button, COLORS, OutlinedButton, Text, TextInput} from '.';
 
 export const ModalBottomPopUp = ({visible, onClose, style, children}: any) => {
   return (
@@ -195,6 +195,87 @@ export const FullScreenModal = ({
     </Modal>
   );
 };
+
+export const AddFieldModal = React.forwardRef(
+  (
+    {
+      value,
+      title,
+      visible,
+      onClose,
+      setValue,
+      fieldText,
+      placeholder,
+      description,
+      onCancelPress,
+      confirmLoading,
+      onConfirmPress,
+      hasError = false,
+      cancelLabel = 'No',
+      confirmLabel = 'Yes',
+      onOverlayPress = () => {},
+    }:any,
+    ref,
+  ) => {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    useImperativeHandle(ref, () => ({
+      hideModal: () => {
+        setIsModalVisible(false);
+      },
+      showModal: () => {
+        setIsModalVisible(true);
+      },
+    }));
+
+    return (
+      <Modal
+        visible={visible || isModalVisible}
+       
+        style={{alignItems: 'center'}}>
+        <Box p="l" width={W * 0.8} borderRadius={10} bg="primaryWhite">
+          {title && (
+            <Text fontSize={18} lineHeight={20} variant={'semiBold'} pb={'m'}>
+              {title}
+            </Text>
+          )}
+          {description && (
+            <Text lineHeight={18} fontSize={15} variant={'semiBold'}>
+              {description}
+            </Text>
+          )}
+          <TextInput
+            value={value}
+            // hasError={hasError}
+            // fieldText={fieldText}
+            placeholder={placeholder}
+            onChangeText={text => setValue(text)}
+          />
+          <Flex mt="xl" justify="space-around" width="100%">
+            {onCancelPress && (
+              <OutlinedButton
+                width={'45%'}
+                height={H * 0.054}
+                title={cancelLabel}
+                onPress={onCancelPress}
+                style={{elevation: 0}}
+              />
+            )}
+
+            <Button
+              height={H * 0.054}
+              title={confirmLabel}
+              onPress={onConfirmPress}
+              loading={confirmLoading}
+              px={onCancelPress ? 0 : 'xl'}
+              width={onCancelPress ? '45%' : 'auto'}
+            />
+          </Flex>
+        </Box>
+      </Modal>
+    );
+  },
+);
 
 export const ErrorHandlingModal = React.forwardRef(
   ({visible, children}: {visible: boolean; children: any}, ref) => {

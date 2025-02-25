@@ -3,16 +3,14 @@ import {
   Modal,
   Pressable,
   ScrollView,
-  TouchableWithoutFeedback,
 } from 'react-native';
 
-import {Box, Text, W, H} from '../../Constants/Theme';
+import {Box, Text, W, H} from '../../theme';
 import * as Animatable from 'react-native-animatable';
-import {analytics} from '../../configs/analytics';
 
-const ReadMoreBottomSheet = React.forwardRef((props, ref) => {
+const ReadMoreBottomSheet = React.forwardRef((props:any, ref) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const animationRef = useRef();
+  const animationRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
     hideBottom: () => {
@@ -25,6 +23,7 @@ const ReadMoreBottomSheet = React.forwardRef((props, ref) => {
 
   const hideWithAnimation = (duration = 500) => {
     if (animationRef?.current) {
+      // @ts-ignore
       animationRef.current.fadeOutDownBig(duration);
       setTimeout(() => {
         setIsModalVisible(false);

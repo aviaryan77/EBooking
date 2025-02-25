@@ -6,18 +6,25 @@ import React, {
   useImperativeHandle,
 } from 'react';
 
-import { H, Box, Text, BoxPressable } from '../../Constants/Theme';
+import {H, Box, Text, PressableBox, } from '../../theme';
 
 import moment from 'moment';
-import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
-import { Calendar } from 'react-native-calendars';
-import Cross from '../../svg/HomeSetup/cross.svg';
-import LeftArrow from '../../svg/HomeSetup/leftArrow.svg';
-import isBeforeToday from '../../functions/isBeforeToday';
-import RightArrow from '../../svg/HomeSetup/rightArrow.svg';
+import {Calendar} from 'react-native-calendars';
 
-const DatePickerModal = (props, ref) => {
+import {Modal} from 'react-native';
+import { ChevronRightIcon, CloseIcon } from '../../svg/Icons';
+
+const isBeforeToday = (date:any) => {
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+
+  return date < today;
+}
+
+
+const DatePickerModal = (props:any, ref:any) => {
   const INITIAL_DATE = moment(new Date()).format('YYYY-MM-DD');
   const [modalVisible, setModalVisible] = useState(false);
   const [selected, setSelected] = useState();
@@ -30,13 +37,15 @@ const DatePickerModal = (props, ref) => {
 
   const marked = useMemo(() => {
     let items = {};
+    // @ts-ignore
     (items[selected] = {
       selected: true,
       disableTouchEvent: true,
       selectedColor: '#5563DA',
       selectedTextColor: 'white',
     }),
-      eventDates.map((date) => {
+      eventDates.map(date => {
+        // @ts-ignore
         items[date] = {
           customStyles: {
             container: {
@@ -52,7 +61,7 @@ const DatePickerModal = (props, ref) => {
     return items;
   }, [selected]);
 
-  const onDayPress = useCallback((day) => {
+  const onDayPress = useCallback((day:any) => {
     if (isBeforeToday(new Date(day.dateString))) {
       Toast.show({
         type: 'error',
@@ -74,29 +83,16 @@ const DatePickerModal = (props, ref) => {
       setModalVisible(true);
     },
   }));
-  const returnArrow = (direction) => {
+  const returnArrow = (direction:any )=> {
     if (direction == 'left') {
-      return <LeftArrow height={15} width={15} />;
+      return <ChevronRightIcon height={15} width={15} />;
     } else {
-      return <RightArrow />;
+      return <ChevronRightIcon />;
     }
   };
 
   return (
-    <Modal
-      statusBarTranslucent={true}
-      animationIn="zoomIn"
-      backdropOpacity={0.4}
-      animationInTiming={100}
-      isVisible={modalVisible}
-      animationOutTiming={200}
-      backdropTransitionInTiming={100}
-      backdropTransitionOutTiming={200}
-      useNativeDriverForBackdrop={true}
-      hideModalContentWhileAnimating={true}
-      onBackdropPress={() => setModalVisible(false)}
-      onBackButtonPress={() => setModalVisible(false)}
-    >
+    <Modal statusBarTranslucent={true} visible={modalVisible}>
       <Box
         style={{
           paddingTop: 20,
@@ -106,16 +102,14 @@ const DatePickerModal = (props, ref) => {
           overflow: 'hidden',
           flexDirection: 'column',
           backgroundColor: 'white',
-        }}
-      >
-        <BoxPressable
+        }}>
+        <PressableBox
           onPress={() => setModalVisible(false)}
-          style={{ justifyContent: 'flex-end', flexDirection: 'row' }}
+          style={{justifyContent: 'flex-end', flexDirection: 'row'}}
           mb="10"
-          px="20"
-        >
-          <Cross />
-        </BoxPressable>
+          px="20">
+          <CloseIcon />
+        </PressableBox>
         <Calendar
           markingType={'custom'}
           markedDates={marked}
@@ -123,8 +117,9 @@ const DatePickerModal = (props, ref) => {
           current={INITIAL_DATE}
           onDayPress={onDayPress}
           enableSwipeMonths={true}
-          style={{ marginBottom: 10 }}
-          renderArrow={(direction) => returnArrow(direction)}
+          style={{marginBottom: 10}}
+
+          renderArrow={direction => returnArrow(direction)}
         />
       </Box>
     </Modal>
