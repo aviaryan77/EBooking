@@ -8,8 +8,8 @@ const FlashBanner = ({event = true, visible}:any) => {
   if (!visible) return null;
   return (
     <Box
-      py="m"
-      px="l"
+      py={16}
+      px={32}
       width="100%"
       borderTopLeftRadius={24}
       borderTopRightRadius={24}

@@ -1,15 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {ScrollView, FlatList, RefreshControl, Pressable} from 'react-native';
+import {FlatList, RefreshControl, Pressable} from 'react-native';
 import Image from 'react-native-scalable-image';
 
 import moment from 'moment';
 
 import LocationSelector from '../../components/experiences/locationSelector';
-import {currencyFormat} from '../../helpers/eventHelper';
+import {currencyFormat, userCurrency} from '../../helpers/eventHelper';
 import {Box, Flex, Screen, Text, W} from '../../theme';
 import {CloseIcon} from '../../svg/Icons';
-import { EVENT_DATA } from '../../components/experiences/EVENT_DATA';
-// import { userCurrency } from '../../helperFunctions/currencies';
+import {EVENT_DATA} from '../../components/experiences/EVENT_DATA';
 
 const category = [
   'all',
@@ -43,7 +42,6 @@ const EventListingScreen = ({route, navigation}: any) => {
       openLocationModal();
     }
   }, [city]);
-
 
   const updateExperienceListing = (
     eventId: any,
@@ -101,7 +99,7 @@ const EventListingScreen = ({route, navigation}: any) => {
 
   const userId = 'asdfggd';
 
-  const onCategoryPress = (item:any )=> {
+  const onCategoryPress = (item: any) => {
     if (item === 'all') {
       setFilteredExperienceList(experienceList);
     } else {
@@ -125,13 +123,10 @@ const EventListingScreen = ({route, navigation}: any) => {
   useEffect(() => {
     if (city != '') {
       setRefreshing(true);
-
     }
   }, [city]);
 
-
-
-  const openCommentInside = (item:any) => {
+  const openCommentInside = (item: any) => {
     navigation.navigate('EventDetailsScreen', {
       event: item,
       updateExperienceListing: route?.params?.updateExperienceListing,
@@ -143,8 +138,7 @@ const EventListingScreen = ({route, navigation}: any) => {
   const event_home_message_2 =
     'with electrifying performances and atmosphere that will leave you spellbound';
 
-
-  const renderCategory = ({item, index}:any) => {
+  const renderCategory = ({item, index}: any) => {
     let selected = selectedCategory?.toLowerCase() === item?.toLowerCase();
     return (
       <Pressable onPress={() => onCategoryPress(item)}>
@@ -173,7 +167,7 @@ const EventListingScreen = ({route, navigation}: any) => {
     );
   };
 
-  const renderEventCard = ({item, index}:any) => {
+  const renderEventCard = ({item, index}: any) => {
     let event = item;
     const isOneDayEvent =
       moment(event?.end_date)
@@ -295,16 +289,13 @@ const EventListingScreen = ({route, navigation}: any) => {
             )}
           </Box>
         </Pressable>
-        <Box marginTop={16}>
-
-         
-        </Box>
+        <Box marginTop={16}></Box>
       </>
     );
   };
 
   const renderEmptyComponent = () => (
-    <Box alignItems="center" mt="l">
+    <Box alignItems="center" mt={32}>
       <Text fontSize={14} lineHeight={16} variant="medium" color="primaryBlue">
         More events coming soon!
       </Text>
@@ -315,7 +306,7 @@ const EventListingScreen = ({route, navigation}: any) => {
   return (
     <Screen flex={1} width={W} bg="primaryBlue">
       <Box flex={1}>
-        <Box width={'100%'} top={0} mt="l" px="l" mb="l">
+        <Box width={'100%'} top={0} mt={32} px={32} mb={32}>
           <Flex justify="space-between">
             <CloseIcon
               width={30}

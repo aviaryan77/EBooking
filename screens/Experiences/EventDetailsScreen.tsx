@@ -25,13 +25,11 @@ import LocationOutline from '../../svg/experiences/location_outline.svg';
 // import CenteredSharedModal from '../../components/Shared/CenteredSharedModal';
 export const BANNER_H = 270;
 
-
 // import ViewShot from 'react-native-view-shot';
 // import {ShareWhatsappModal} from '../../components/Refer';
-import { BackIcon, BookIcon, ChevronRightIcon } from '../../svg/Icons';
+import {BackIcon, BookIcon, ChevronRightIcon} from '../../svg/Icons';
 
-const EventDetailsScreen = ({route, navigation}
-  :any) => {
+const EventDetailsScreen = ({route, navigation}: any) => {
   let event = route?.params?.event;
   let redirect_link = event?.redirect_link;
 
@@ -52,8 +50,6 @@ const EventDetailsScreen = ({route, navigation}
   const descriptionRef = useRef(null);
   const bookTicketErrorRef = useRef(null);
 
-
-
   const scrollA = useRef(new Animated.Value(0)).current;
   const [isExpectationCollapsed, setIsExpectationCollapsed] = useState(true);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(true);
@@ -66,16 +62,12 @@ const EventDetailsScreen = ({route, navigation}
   const [expectationContainerHeight, setExpectationContainerHeight] =
     useState();
 
-
   const onExpectationLoadMorePress = () => {
     if (info) {
       setInfoTitles(Object.keys(info));
       setIsExpectationCollapsed(false);
     }
   };
-
-
- 
 
   useEffect(() => {
     if (!scrollA) return;
@@ -91,15 +83,13 @@ const EventDetailsScreen = ({route, navigation}
     return () => scrollA.removeListener(listenerId);
   });
 
- 
-
   const Header = () => {
     return (
       <Box
-        pt="m"
-        pb="s"
-        px="m"
-        mx="s"
+        pt={16}
+        pb={8}
+        px={16}
+        mx={8}
         flexDirection="row"
         alignItems="center"
         justifyContent="space-between">
@@ -143,7 +133,7 @@ const EventDetailsScreen = ({route, navigation}
         )}
 
         {/* <Box flexDirection="row" alignItems="center">
-          <Box marginRight="m" onTouchEnd={() => setIsLiked(!isLiked)}>
+          <Box marginRight={16} onTouchEnd={() => setIsLiked(!isLiked)}>
             {isLiked ? (
               <HeartFilled fill="#F05B5B" height={20} width={20} />
             ) : (
@@ -169,12 +159,12 @@ const EventDetailsScreen = ({route, navigation}
   const AddressContainer = () => {
     return (
       <Box
-        mt="s"
-        px="l"
+        mt={8}
+        px={32}
         flexDirection="row"
         alignItems="center"
         justifyContent="space-between">
-        <Box flex={1} marginRight="m" py="s">
+        <Box flex={1} marginRight={16} py={8}>
           <Text variant="medium" color="grey200" fontSize={16}>
             {event?.location?.address ? event?.location?.address + '' : ''}
           </Text>
@@ -183,10 +173,10 @@ const EventDetailsScreen = ({route, navigation}
           <Pressable
             onPress={() => Linking.openURL(event?.location?.maps_link)}>
             <Box
-              px="m"
-              py="s"
+              px={16}
+              py={8}
               bg="grey500"
-              borderRadius="m"
+              borderRadius={16}
               flexDirection="row"
               alignItems="center">
               <LocationOutline height={14} width={14} />
@@ -217,9 +207,9 @@ const EventDetailsScreen = ({route, navigation}
         .toString();
     return (
       <Box
-        px="l"
+        px={32}
         flex={1}
-        marginRight="m"
+        marginRight={16}
         flexDirection="row"
         alignItems="center">
         <Text
@@ -236,11 +226,7 @@ const EventDetailsScreen = ({route, navigation}
               : ''
           }`}
         </Text>
-        <Text
-          fontSize={24}
-          lineHeight={28}
-          variant="medium"
-          color="primaryBlack">
+        <Text fontSize={24} lineHeight={28} variant="medium" color="#000000">
           &#x2022;
         </Text>
         <Text variant="medium" style={{color: '#333333'}} fontSize={14}>
@@ -258,11 +244,11 @@ const EventDetailsScreen = ({route, navigation}
 
   const Description = () => {
     return (
-      <Box px="l" mt="m">
+      <Box px={32} mt={16}>
         {event?.description?.length > 120 ? (
           <>
             <HTML
-            // @ts-ignore
+              // @ts-ignore
               baseFontStyle={{fontFamily: 'Metropolis-Regular'}}
               tagsStyles={tagsStyles}
               source={{
@@ -292,8 +278,8 @@ const EventDetailsScreen = ({route, navigation}
 
   const Organizer = () => {
     return (
-      <Box px="l" mt="s" flexDirection="row" alignItems="center">
-        <Box flex={1} mr="m">
+      <Box px={32} mt={8} flexDirection="row" alignItems="center">
+        <Box flex={1} mr={16}>
           <Text
             fontSize={18}
             color="grey100"
@@ -304,7 +290,7 @@ const EventDetailsScreen = ({route, navigation}
           </Text>
         </Box>
         {event?.partner_logo && (
-          <Box bg="grey300" height={40} width={40} borderRadius="m">
+          <Box bg="grey300" height={40} width={40} borderRadius={16}>
             <Image
               source={{uri: event?.partner_logo}}
               style={{
@@ -321,7 +307,7 @@ const EventDetailsScreen = ({route, navigation}
 
   const Capacity = () => {
     return (
-      <Box px="l" mt="m" flexDirection="row" alignItems="center">
+      <Box px={32} mt={16} flexDirection="row" alignItems="center">
         <CapacityIcon marginRight={4} height={25} width={25} />
 
         <Text variant="semiBold" color="grey200">
@@ -339,7 +325,7 @@ const EventDetailsScreen = ({route, navigation}
     if (!languages.length) return null;
     if (languages.length == 1)
       return (
-        <Box px="l" mt="m" flexDirection="row" alignItems="center">
+        <Box px={32} mt={16} flexDirection="row" alignItems="center">
           <LanguageIcon marginRight={4} height={30} width={30} />
           <Text variant="semiBold" color="grey200">
             {' '}
@@ -352,7 +338,7 @@ const EventDetailsScreen = ({route, navigation}
       );
     else
       return (
-        <Box px="l" mt="m" flexDirection="row" alignItems="center">
+        <Box px={32} mt={16} flexDirection="row" alignItems="center">
           <LanguageIcon marginRight={4} height={30} width={30} />
           <Text variant="semiBold" color="grey200">
             {' '}
@@ -371,7 +357,7 @@ const EventDetailsScreen = ({route, navigation}
 
   const About = () => {
     return (
-      <Box px="l" mt="l">
+      <Box px={32} mt={32}>
         {about?.length > 120 ? (
           <>
             <Text variant="regular" numberOfLines={2} color="grey100">
@@ -421,60 +407,57 @@ const EventDetailsScreen = ({route, navigation}
 
   const Expectation = () => {
     return (
-      <Box px="l" mt="m">
+      <Box px={32} mt={16}>
         <UpwardShadow />
         <Text
           variant="semiBold"
           color="primaryBlue"
           fontSize={18}
           lineHeight={24}
-          my="m">
+          my={16}>
           What to expect
         </Text>
         {/* <Collapsible collapsed={isExpectationCollapsed} collapsedHeight={150}> */}
-          {infoTitles?.map(title => {
-            return (
-              <Box key={title} mb="s">
-                <Text
-                  fontSize={18}
-                  color="grey100"
-                  lineHeight={24}
-                  variant="semiBold"
-                  mb="s">
-                  {title}
-                </Text>
-                {info[title].map((bullet:any) => {
-                  return (
-                    <Box key={bullet}>
-                      <Box flexDirection="row" alignItems="flex-start">
-                        <Box
-                          mr="m"
-                          mt="s"
-                          width={10}
-                          height={10}
-                          bg="grey300"
-                          maxWidth="80%"
-                          borderRadius="m"
-                        />
-                        <Box flex={1}>
-                          <Text
-                            variant="medium"
-                            color="grey200"
-                            lineHeight={20}>
-                            {bullet}
-                          </Text>
-                        </Box>
+        {infoTitles?.map(title => {
+          return (
+            <Box key={title} mb={8}>
+              <Text
+                fontSize={18}
+                color="grey100"
+                lineHeight={24}
+                variant="semiBold"
+                mb={8}>
+                {title}
+              </Text>
+              {info[title].map((bullet: any) => {
+                return (
+                  <Box key={bullet}>
+                    <Box flexDirection="row" alignItems="flex-start">
+                      <Box
+                        mr={16}
+                        mt={8}
+                        width={10}
+                        height={10}
+                        bg="grey300"
+                        maxWidth="80%"
+                        borderRadius={16}
+                      />
+                      <Box flex={1}>
+                        <Text variant="medium" color="grey200" lineHeight={20}>
+                          {bullet}
+                        </Text>
                       </Box>
                     </Box>
-                  );
-                })}
-              </Box>
-            );
-          })}
+                  </Box>
+                );
+              })}
+            </Box>
+          );
+        })}
         {/* </Collapsible> */}
         {isExpectationCollapsed ? (
           <Text
-            mt="m"
+            mt={16}
             lineHeight={20}
             variant="semiBold"
             textDecorationLine="underline"
@@ -485,10 +468,10 @@ const EventDetailsScreen = ({route, navigation}
       </Box>
     );
   };
-  const BenefitBullets = ({text, image}:any) => {
+  const BenefitBullets = ({text, image}: any) => {
     return (
-      <Box flexDirection="row" alignItems="center" mt="l">
-        <Center height={72} width={80} mr="l" overflow="hidden">
+      <Box flexDirection="row" alignItems="center" mt={32}>
+        <Center height={72} width={80} mr={32} overflow="hidden">
           <Image
             source={image}
             resizeMode="contain"
@@ -507,9 +490,9 @@ const EventDetailsScreen = ({route, navigation}
 
   const Benefits = () => {
     return (
-      <Box px="l" mt="m">
+      <Box px={32} mt={16}>
         <Text
-          my="m"
+          my={16}
           fontSize={14}
           lineHeight={24}
           color="primaryRed"
@@ -518,7 +501,7 @@ const EventDetailsScreen = ({route, navigation}
           BENEFITS
         </Text>
         <Text variant="semiBold" color="grey100" fontSize={18} lineHeight={24}>
-          Why Book with Splitkaro
+          Why Book with App
         </Text>
         <BenefitBullets
           text="Avail Group Discounts for booking events!"
@@ -539,7 +522,6 @@ const EventDetailsScreen = ({route, navigation}
   const bookTicketHandler = async () => {
     // calendarRef.current.showModal()
     // return null;
-
 
     // if (redirect_link) {
     //   Linking.openURL(redirect_link);
@@ -566,7 +548,7 @@ const EventDetailsScreen = ({route, navigation}
         bookTicketErrorRef.current.showModal(res?.data?.detail);
       }
     } catch (error) {
-      console.log('error', error)
+      console.log('error', error);
       setIsButtonLoading(false);
       // @ts-ignore
       bookTicketErrorRef.current.showModal(
@@ -578,8 +560,8 @@ const EventDetailsScreen = ({route, navigation}
   const captureAndShareScreenshot = () => {
     // captureRef?.current?.capture()?.then(data => {
     //   shareWhatsappRef.current.showShare({
-    //     message: `Did you check ${event.name} out on Splitkaro?`,
-    //     // message: `Did you check ${event.name} out on Splitkaro? [Link]`, // TODO with Link
+    //     message: `Did you check ${event.name} out on App?`,
+    //     // message: `Did you check ${event.name} out on App? [Link]`, // TODO with Link
     //     base64: data,
     //   });
     // });
@@ -587,7 +569,7 @@ const EventDetailsScreen = ({route, navigation}
 
   return (
     <>
-      <Screen flex={1} width={W} bg="primaryWhite">
+      <Screen pt={40} flex={1} width={W} bg="primaryWhite">
         <Header />
         <Animated.ScrollView
           contentContainerStyle={{paddingBottom: 200}}
@@ -605,15 +587,15 @@ const EventDetailsScreen = ({route, navigation}
               quality: 0.9,
               result: 'base64',
             }}> */}
-            <Hero event={event} bannerHeight={BANNER_H} />
-            
-            <AddressContainer />
-            <TimeContainer />
-            <Description />
-            <Box height={1} mx="l" my="m" bg="grey500" />
-            <Organizer />
-            <Capacity />
-            <Languages />
+          <Hero event={event} bannerHeight={BANNER_H} />
+
+          <AddressContainer />
+          <TimeContainer />
+          <Description />
+          <Box height={1} mx={32} my={16} bg="grey500" />
+          <Organizer />
+          <Capacity />
+          <Languages />
           {/* </ViewShot> */}
           <About />
           <Expectation />
@@ -635,9 +617,9 @@ const EventDetailsScreen = ({route, navigation}
         </Animated.ScrollView>
 
         <ReadMoreBottomSheet ref={descriptionRef}>
-          <Box py="m" px="l" style={{paddingBottom: 50}}>
+          <Box py={16} px={32} style={{paddingBottom: 50}}>
             <HTML
-            // @ts-ignore
+              // @ts-ignore
               baseFontStyle={{fontFamily: 'Metropolis-Regular'}}
               tagsStyles={{
                 span: {
@@ -658,12 +640,10 @@ const EventDetailsScreen = ({route, navigation}
           </Box>
         </ReadMoreBottomSheet>
 
-        
-
         <ReadMoreBottomSheet ref={aboutRef}>
-          <Box py="m" px="l" style={{paddingBottom: 50}}>
+          <Box py={16} px={32} style={{paddingBottom: 50}}>
             <HTML
-            // @ts-ignore
+              // @ts-ignore
               baseFontStyle={{fontFamily: 'Metropolis-Regular'}}
               tagsStyles={{
                 span: {
@@ -686,7 +666,7 @@ const EventDetailsScreen = ({route, navigation}
         <ErrorHandlingModal
           ref={bookTicketErrorRef}
           // @ts-ignore
-          description="Something went wrong"  onPress={() => bookTicketErrorRef.current.hideModal()}  onClose={() => bookTicketErrorRef.current.hideModal()}
+          description="Something went wrong" onPress={() => bookTicketErrorRef.current.hideModal()}onClose={() => bookTicketErrorRef.current.hideModal()}
         />
 
         {/* <CenteredSharedModal

@@ -123,7 +123,7 @@ const CheckEventPaymentStatusScreen = ({navigation, route}:any) => {
         onBackPress={() => navigation.dispatch(popAction)}
       />
 
-      <Center flex={0.8} mx="m">
+      <Center flex={0.8} mx={16}>
         <Center>
           {paymentStage == 'inprocess' && (
             <Center>

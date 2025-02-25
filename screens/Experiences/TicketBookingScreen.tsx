@@ -1,23 +1,33 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Pressable, ScrollView} from 'react-native';
 
-import {Box, Text, W, Header,
+import {
+  Box,
+  Text,
+  W,
+  Header,
   Screen,
   Center,
-  ErrorHandlingModal,} from  '../../theme';
+  ErrorHandlingModal,
+  ErrorHandlingModalRef,
+} from '../../theme';
 import {TicketCounter} from '../../components/experiences';
 import Svg, {Stop, Defs, Rect, LinearGradient} from 'react-native-svg';
 
 import * as Animatable from 'react-native-animatable';
 
-import {currencyFormat, debounce, userCurrency} from  '../../helpers/eventHelper';
+import {
+  currencyFormat,
+  debounce,
+  userCurrency,
+} from '../../helpers/eventHelper';
+import {EventType} from '../../components/experiences/EVENT_DATA';
 // import {createOrder, getPriceBreakup} from '../../helperFunctions/Api';
 
-
-const TicketBookingScreen = ({route, navigation}:any) => {
+const TicketBookingScreen = ({route, navigation}: any) => {
   const {event, booking_id} = route.params ?? {};
 
-  type MemberType = 'single' | 'male' |'female' | 'couple';
+  type MemberType = 'single' | 'male' | 'female' | 'couple';
   const [memberCount, setMemberCount] = useState({
     single: 0,
     male: 0,
@@ -30,11 +40,18 @@ const TicketBookingScreen = ({route, navigation}:any) => {
   const [isTicketCollapsed, setIsTicketCollapsed] = useState(false);
   const [totalMemberCount, setTotalMemberCount] = useState<number>(0);
   const [isDataFetching, setIsDataFetching] = useState(false);
-  const [offerResponse, setOfferResponse] = useState(null);
+  const [offerResponse, setOfferResponse] = useState({
+    offer_applied_id: '',
+    total_amount: 0,
+    total_discount: 0,
+    total_quantity: 0,
+    final_price: 0,
+    total_price: 0,
+  });
 
   let basePrice = event?.price;
 
-  const apiErrorRef = useRef<any>(null);
+  const apiErrorRef = useRef<ErrorHandlingModalRef>(null);
   const collapseRef = useRef<any>(null);
   const counterTexRef = useRef<any>(null);
 
@@ -47,7 +64,7 @@ const TicketBookingScreen = ({route, navigation}:any) => {
   }, [memberCount]);
 
   const getPrice = async () => {
-    setIsDataFetching(true);
+    // setIsDataFetching(true);
 
     try {
       // let res = await getPriceBreakup({
@@ -64,7 +81,6 @@ const TicketBookingScreen = ({route, navigation}:any) => {
       //     ],
       //   },
       // });
-
       // if (res.status === 200) {
       //   setOfferResponse(res?.data);
       //   setOfferAppliedId(res?.data?.offer_applied_id);
@@ -81,13 +97,14 @@ const TicketBookingScreen = ({route, navigation}:any) => {
     }
   };
 
-  const sumValues =( obj:object ) => Object?.values(obj)?.reduce((a, b) => a + b, 0);
+  const sumValues = (obj: object) =>
+    Object?.values(obj)?.reduce((a, b) => a + b, 0);
 
   let price_breakup = event?.price_breakup ?? {};
   let groupTypes = Object.keys(price_breakup ?? []); //'single', 'male',  'female', 'couple' from BE
 
-  const onMinusPress = (type:MemberType) => {
-    setIsDataFetching(true);
+  const onMinusPress = (type: MemberType) => {
+    // setIsDataFetching(true);
     if (memberCount[type] > 0 && memberCount[type] <= maxMemberCount) {
       setMemberCount({
         ...memberCount,
@@ -96,8 +113,8 @@ const TicketBookingScreen = ({route, navigation}:any) => {
     }
   };
 
-  const onPlusPress = (type:MemberType) => {
-    setIsDataFetching(true);
+  const onPlusPress = (type: MemberType) => {
+    setIsDataFetching(false);
     if (memberCount[type] >= 0 && memberCount[type] < maxMemberCount) {
       setMemberCount({
         ...memberCount,
@@ -116,15 +133,15 @@ const TicketBookingScreen = ({route, navigation}:any) => {
     });
   };
 
-  const TicketDetails = ({visible}:{visible:boolean}) => {
+  const TicketDetails = ({visible}: {visible: boolean}) => {
     if (!visible) return null;
     return (
       <Box>
         {/* @ts-ignore */}
-        {groupTypes?.map((type : MemberType) => {
+        {groupTypes?.map((type: MemberType) => {
           return (
             <Box
-              px="l"
+              px={32}
               pt={16}
               pb={20}
               width={W}
@@ -138,7 +155,7 @@ const TicketBookingScreen = ({route, navigation}:any) => {
                   fontSize={14}
                   lineHeight={20}
                   variant="medium"
-                  color="primaryBlack"
+                  color="#000000"
                   textTransform="capitalize">
                   {type}
                 </Text>
@@ -165,17 +182,13 @@ const TicketBookingScreen = ({route, navigation}:any) => {
                     height={30}
                     borderWidth={1}
                     borderRadius={16}
-                    borderColor={
-                      memberCount[type] > 0 ? 'primaryBlack' : 'grey300'
-                    }>
+                    borderColor={memberCount[type] > 0 ? '#000000' : 'grey300'}>
                     <Text
                       variant="regular"
                       fontSize={16}
                       lineHeight={24}
                       allowFontScaling={false}
-                      color={
-                        memberCount[type] > 0 ? 'primaryBlack' : 'grey300'
-                      }>
+                      color={memberCount[type] > 0 ? '#000000' : 'grey300'}>
                       &#x2014;
                     </Text>
                   </Center>
@@ -198,9 +211,7 @@ const TicketBookingScreen = ({route, navigation}:any) => {
                     borderWidth={1}
                     borderRadius={16}
                     borderColor={
-                      memberCount[type] < maxMemberCount
-                        ? 'primaryBlack'
-                        : 'grey300'
+                      memberCount[type] < maxMemberCount ? '#000000' : 'grey300'
                     }>
                     <Text
                       fontSize={24}
@@ -209,7 +220,7 @@ const TicketBookingScreen = ({route, navigation}:any) => {
                       allowFontScaling={false}
                       color={
                         memberCount[type] < maxMemberCount
-                          ? 'primaryBlack'
+                          ? '#000000'
                           : 'grey300'
                       }>
                       +
@@ -224,7 +235,7 @@ const TicketBookingScreen = ({route, navigation}:any) => {
     );
   };
 
-  const BookingCard = ({card}:any) => {
+  const BookingCard = ({card}: any) => {
     const maxPrice = basePrice * card.group_size;
     const selectedCard = offerAppliedId == card?.id;
     return (
@@ -272,7 +283,7 @@ const TicketBookingScreen = ({route, navigation}:any) => {
           />
         </Svg>
 
-        <Box mx="l" px={8} pt={8} height={'100%'} justifyContent="center">
+        <Box mx={32} px={8} pt={8} height={'100%'} justifyContent="center">
           <Box
             alignItems="center"
             flexDirection="row"
@@ -281,7 +292,7 @@ const TicketBookingScreen = ({route, navigation}:any) => {
               <Text
                 fontSize={16}
                 variant="semiBold"
-                color="primaryBlack"
+                color="#000000"
                 letterSpacing={-0.2}
                 allowFontScaling={false}>
                 Group of {card.group_size}
@@ -372,7 +383,11 @@ const TicketBookingScreen = ({route, navigation}:any) => {
   };
 
   const orderConfirmHandler = async () => {
-    setIsButtonLoading(true);
+    // setIsButtonLoading(true);
+    navigation.navigate('ConfirmDetailsScreen', {
+      event,
+      orderData: 'res.data',
+    });
 
     try {
       // let res = await createOrder({
@@ -390,7 +405,6 @@ const TicketBookingScreen = ({route, navigation}:any) => {
       //     ],
       //   },
       // });
-
       // if (res.status === 200) {
       //   navigation.navigate('ConfirmDetailsScreen', {
       //     event,
@@ -403,15 +417,12 @@ const TicketBookingScreen = ({route, navigation}:any) => {
       // }
     } catch (error) {
       setIsButtonLoading(false);
-      apiErrorRef.current.showModal(JSON.stringify(error));
+      apiErrorRef?.current?.showModal(JSON.stringify(error));
     }
   };
 
   return (
-    // <TouchableWithoutFeedback onPress={()=>{
-    //   console.log(`pressed`);
-    //   setIsTicketCollapsed(true)}}>
-    <Screen flex={1} width={W} bg="primaryWhite">
+    <Screen pt={32} flex={1} width={W} bg="primaryWhite">
       <Header
         pt={8}
         title="Book tickets"
@@ -442,8 +453,9 @@ const TicketBookingScreen = ({route, navigation}:any) => {
 
       <ErrorHandlingModal
         ref={apiErrorRef}
-        // @ts-ignore
-        description="Something went wrong"  onPress={() => apiErrorRef.current.hideModal()} onClose={() => apiErrorRef.current.hideModal()}
+        description="Something went wrong"
+        onPress={() => apiErrorRef?.current?.hideModal()}
+        onClose={() => apiErrorRef?.current?.hideModal()}
       />
     </Screen>
   );

@@ -39,15 +39,15 @@ const TicketCounter = ({
     return (
       <>
         <Box
-          my="s"
+          my={8}
           width="100%"
           bg="primaryWhite"
           borderTopWidth={1}
           borderTopColor="grey400"
         />
         <Box
-          mt="m"
-          px="l"
+          mt={16}
+          px={32}
           width={W}
           alignItems="center"
           flexDirection="row"
@@ -60,7 +60,7 @@ const TicketCounter = ({
                 fontSize={22}
                 variant="semiBold"
                 lineHeight={30}
-                color="primaryBlack"
+                color="#000000"
                 allowFontScaling={false}>
                 {userCurrency}{currencyFormat(offerResponse?.final_price)}
               </Text>
@@ -80,7 +80,7 @@ const TicketCounter = ({
             onPress={()=>{
               onConfirmPress();
             }}
-            loading={buttonLoading || isDataFetching}
+            // loading={buttonLoading || isDataFetching}
           />
         </Box>
       </>
@@ -94,12 +94,12 @@ const TicketCounter = ({
     const selectedCard = offerAppliedId == item?.id;
     return (
       <Box
-        mr="s"
-        px="m"
-        py="m"
+        mr={8}
+        px={16}
+        py={16}
         width={W * 0.6}
         borderWidth={1}
-        borderRadius="s"
+        borderRadius={8}
         bg={selectedCard ? 'green100' : 'primaryWhite'}
         borderColor={selectedCard ? 'green500' : 'grey500'}>
         <Text variant="regular" color="grey150" fontSize={12}>

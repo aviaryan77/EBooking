@@ -12,8 +12,8 @@ const ConfirmPay = ({totalAmount, onConfirmPress, buttonLoading}:any) => {
     if (!visible) return null;
     return (
       <Box
-        mt="m"
-        px="l"
+        mt={16}
+        px={32}
         width={W}
         alignItems="center"
         flexDirection="row"
@@ -23,7 +23,7 @@ const ConfirmPay = ({totalAmount, onConfirmPress, buttonLoading}:any) => {
             fontSize={22}
             lineHeight={30}
             variant="semiBold"
-            color="primaryBlack"
+            color="#000000"
             allowFontScaling={false}>
             {userCurrency} {currencyFormat(totalAmount)}
           </Text>

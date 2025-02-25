@@ -33,9 +33,9 @@ const BookingConfirmationScreen = ({route, navigation}:any) => {
   const Header = () => {
     return (
       <Box
-        pb="s"
-        px="m"
-        pt="m"
+        pb={8}
+        px={16}
+        pt={16}
         alignItems="center"
         flexDirection="row"
         justifyContent="space-between">
@@ -71,7 +71,7 @@ const BookingConfirmationScreen = ({route, navigation}:any) => {
   const FieldDetails = ({visible = true, fieldName, details}:any) => {
     if (!event) return null;
     return (
-      <Box pt="m">
+      <Box pt={16}>
         <Text
           fontSize={12}
           lineHeight={14}
@@ -95,7 +95,7 @@ const BookingConfirmationScreen = ({route, navigation}:any) => {
 
   const shareMessage = `Hey,
 
-${event?.name} seems to be an exciting event. Let’s book this event on Splitkaro & avail Group Discounts!`;
+${event?.name} seems to be an exciting event. Let’s book this event on App & avail Group Discounts!`;
 
 
 
@@ -104,7 +104,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on Splitka
       <Screen width={W} bg="primaryBlue">
         <>
 
-          <Box alignItems="center" mt="m" px="m">
+          <Box alignItems="center" mt={16} px={16}>
             <Text
               textAlign="center"
               variant="regular"
@@ -114,7 +114,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on Splitka
               Fetching your booking details
             </Text>
             <Text
-              mt="s"
+              mt={8}
               fontSize={16}
               lineHeight={20}
               variant="regular"
@@ -132,7 +132,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on Splitka
     return (
       <Screen width={W} bg="primaryBlue">
         <>
-          <Box alignItems="center" mt="m" px="m">
+          <Box alignItems="center" mt={16} px={16}>
             <Text
               textAlign="center"
               variant="regular"
@@ -142,7 +142,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on Splitka
               Your booking is being processed...
             </Text>
             <Text
-              mt="s"
+              mt={8}
               fontSize={16}
               lineHeight={20}
               variant="regular"

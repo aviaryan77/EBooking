@@ -1,4 +1,4 @@
-import React, {useState, useRef, useImperativeHandle} from 'react';
+import React, {useState, useRef, useImperativeHandle, forwardRef} from 'react';
 import {
   View,
   Modal,
@@ -10,6 +10,7 @@ import {
 import {Box, Flex, H, PressableBox, VStack, W} from './containers';
 
 import {Button, COLORS, OutlinedButton, Text, TextInput} from '.';
+import {CloseIcon, HelpIcon} from '../svg/Icons';
 
 export const ModalBottomPopUp = ({visible, onClose, style, children}: any) => {
   return (
@@ -66,7 +67,6 @@ export const ModalPopUp = ({
     </Modal>
   );
 };
-
 
 export const ConfirmationModal = React.forwardRef(
   (
@@ -214,7 +214,7 @@ export const AddFieldModal = React.forwardRef(
       cancelLabel = 'No',
       confirmLabel = 'Yes',
       onOverlayPress = () => {},
-    }:any,
+    }: any,
     ref,
   ) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -229,11 +229,8 @@ export const AddFieldModal = React.forwardRef(
     }));
 
     return (
-      <Modal
-        visible={visible || isModalVisible}
-       
-        style={{alignItems: 'center'}}>
-        <Box p="l" width={W * 0.8} borderRadius={10} bg="primaryWhite">
+      <Modal visible={visible || isModalVisible} style={{alignItems: 'center'}}>
+        <Box p={32} width={W * 0.8} borderRadius={10} bg="primaryWhite">
           {title && (
             <Text fontSize={18} lineHeight={20} variant={'semiBold'} pb={'m'}>
               {title}
@@ -277,8 +274,39 @@ export const AddFieldModal = React.forwardRef(
   },
 );
 
-export const ErrorHandlingModal = React.forwardRef(
-  ({visible, children}: {visible: boolean; children: any}, ref) => {
+interface ErrorHandlingModalProps {
+  visible?: boolean;
+  onClose?: () => void;
+  onPress?: () => void;
+  title?: string;
+  description?: string;
+  buttonLabel?: string;
+  feedbackButtonLabel?: string;
+  onFeedbackPress?: () => void;
+}
+
+export interface ErrorHandlingModalRef {
+  hideModal: () => void;
+  showModal: (err?: string) => void;
+}
+
+export const ErrorHandlingModal = forwardRef<
+  ErrorHandlingModalRef,
+  ErrorHandlingModalProps
+>(
+  (
+    {
+      visible,
+      onClose,
+      onPress,
+      title = 'Error!',
+      description = 'Something went wrong. Please try again',
+      buttonLabel = 'Close',
+      feedbackButtonLabel = 'Help',
+      onFeedbackPress = () => {},
+    },
+    ref,
+  ) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [errMessage, setErrMessage] = useState('');
 
@@ -286,12 +314,66 @@ export const ErrorHandlingModal = React.forwardRef(
       hideModal: () => {
         setIsModalVisible(false);
       },
-      showModal: (err: any) => {
+      showModal: err => {
         setIsModalVisible(true);
-        setErrMessage(err);
+        err && setErrMessage(err);
       },
     }));
 
-    return <Modal visible={visible || isModalVisible}>{children}</Modal>;
+    return (
+      <Modal visible={visible || isModalVisible} animationType="slide">
+        <Box
+          p="l"
+          width={W * 0.8}
+          borderRadius={24}
+          bg="primaryWhite"
+          alignItems="center"
+          onTouchEnd={onPress}>
+          <Box position="absolute" top={16} right={16}>
+            <CloseIcon width={30} height={30} />
+          </Box>
+          <Text
+            fontSize={18}
+            lineHeight={20}
+            variant="semiBold"
+            pb={'m'}
+            textAlign="center">
+            {title}
+          </Text>
+
+          <Text
+            fontSize={15}
+            lineHeight={18}
+            color="primaryRed"
+            textAlign="center"
+            variant={'semiBold'}>
+            {!!errMessage ? errMessage : description}
+          </Text>
+          <Flex mt="xl" justify="space-around" width="100%">
+            {onFeedbackPress && (
+              <OutlinedButton
+                mx={4}
+                width={'auto'}
+                flex={1}
+                height={H * 0.054}
+                onPress={onFeedbackPress}
+                icon={<HelpIcon width={16} height={16} marginRight={4} />}
+                style={{elevation: 0}}
+                title={feedbackButtonLabel}
+              />
+            )}
+            <Button
+              mx={4}
+              flex={1}
+              width="auto"
+              maxWidth="55%"
+              height={H * 0.054}
+              title={buttonLabel}
+              onPress={onClose}
+            />
+          </Flex>
+        </Box>
+      </Modal>
+    );
   },
 );

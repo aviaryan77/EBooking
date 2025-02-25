@@ -7,6 +7,7 @@ import {Box, Text, W} from '../../theme';
 import {currencyFormat} from '../../helpers/eventHelper';
 import {navigate} from '../../navigation/RootNavigation';
 import Svg, {Stop, Defs, Rect, Line, LinearGradient} from 'react-native-svg';
+import Log from '../../services/Log';
 
 const EventEntry = ({visible}: any) => {
   if (!visible) return null;
@@ -68,6 +69,7 @@ const EventEntry = ({visible}: any) => {
     return (
       <Pressable
         onPress={() => {
+          console.log('pressed')
           navigate('EventDetailsScreen', {
             event: item,
             updateExperienceListing,
@@ -191,7 +193,6 @@ const EventEntry = ({visible}: any) => {
                 overflow: 'hidden',
                 alignItems: 'center',
                 marginVertical: 3,
-
                 borderTopRightRadius: 10,
                 borderBottomRightRadius: 10,
               }}>
@@ -331,7 +332,7 @@ const EventEntry = ({visible}: any) => {
               });
             }}
             variant="semiBold"
-            color="primaryBlack"
+            color="#000000"
             textDecorationLine="underline">
             See all
           </Text>

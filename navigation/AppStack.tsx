@@ -10,6 +10,7 @@ import {
   BookingConfirmationScreen,
   CheckEventPaymentStatusScreen,
 } from '../screens/Experiences';
+import {EventType} from '../components/experiences/EVENT_DATA';
 
 export type AppStackParamList = {
   HomeScreen: undefined;
@@ -18,6 +19,7 @@ export type AppStackParamList = {
   EventDetailsScreen: undefined;
   ConfirmDetailsScreen: undefined;
   TicketBookingScreen: undefined;
+
   BookingConfirmationScreen: undefined;
   CheckEventPaymentStatusScreen: undefined;
 };
@@ -33,30 +35,24 @@ const AppStack: React.FC = () => {
         ...TransitionPresets.SlideFromRightIOS,
       }}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="TabNavigator" getComponent={() => TabNavigator} />
-      <Stack.Screen
-        name="EventListingScreen"
-        getComponent={() => EventListingScreen}
-      />
-      <Stack.Screen
-        name="EventDetailsScreen"
-        getComponent={() => EventDetailsScreen}
-      />
+      <Stack.Screen name="TabNavigator" component={TabNavigator} />
+      <Stack.Screen name="EventListingScreen" component={EventListingScreen} />
+      <Stack.Screen name="EventDetailsScreen" component={EventDetailsScreen} />
       <Stack.Screen
         name="ConfirmDetailsScreen"
-        getComponent={() => ConfirmDetailsScreen}
+        component={ConfirmDetailsScreen}
       />
       <Stack.Screen
         name="TicketBookingScreen"
-        getComponent={() => TicketBookingScreen}
+        component={TicketBookingScreen}
       />
       <Stack.Screen
         name="BookingConfirmationScreen"
-        getComponent={() => BookingConfirmationScreen}
+        component={BookingConfirmationScreen}
       />
       <Stack.Screen
         name="CheckEventPaymentStatusScreen"
-        getComponent={() => CheckEventPaymentStatusScreen}
+        component={CheckEventPaymentStatusScreen}
       />
     </Stack.Navigator>
   );

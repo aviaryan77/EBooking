@@ -46,10 +46,10 @@ const ReadMoreBottomSheet = React.forwardRef((props:any, ref) => {
         ref={animationRef}
         animation={'fadeInUpBig'}
         duration={500}>
-        <Box pt="m" width={W} bg="primaryWhite">
+        <Box pt={16} width={W} bg="primaryWhite">
           <Pressable onPressIn={() => hideWithAnimation()}>
             <Box
-              mb="m"
+              mb={16}
               width={30}
               height={5}
               bg="grey200"

@@ -113,7 +113,7 @@ export const Header: FC<HeaderProps> = ({
           lineHeight={24}
           variant={'semiBold'}
           paddingVertical={10}
-          color={'primaryBlack'}>
+          color={'#000000'}>
           {title}
         </Text>
       </Box>
@@ -150,7 +150,7 @@ export const Center = ({
 
 export const Box = ({children, ...args}: any) => {
   return (
-    <Pressable style={{...getLayoutShort({...args})}}>{children}</Pressable>
+    <View style={{...getLayoutShort({...args})}}>{children}</View>
   );
 };
 

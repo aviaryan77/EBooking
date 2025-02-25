@@ -9,8 +9,8 @@ const FlashOffer = ({offerResponse, isOfferApplied, visible = true}:any) => {
   if (!visible) return null;
   return (
     <Box
-      py="s"
-      px="l"
+      py={8}
+      px={32}
       width="100%"
       borderTopLeftRadius={24}
       borderTopRightRadius={24}
@@ -40,7 +40,7 @@ const FlashOffer = ({offerResponse, isOfferApplied, visible = true}:any) => {
               color="green500"
               variant="medium"
               letterSpacing={-0.2}>
-              Splitkaro Exclusive Offers
+              App Exclusive Offers
             </Text>
             <Text
               fontSize={12}

@@ -40,7 +40,7 @@ export const EVENT_DATA = [
     type: 'events',
     meta: {
       languages: ['Malayalam', 'English', 'Tamil', 'Hindi'],
-      partner_email: 'support@splitkaro.com',
+      partner_email: 'support@example.com',
       important_info: [
         {
           "Do's": [
@@ -139,7 +139,7 @@ export const EVENT_DATA = [
     type: 'Adventure',
     meta: {
       languages: [],
-      partner_email: 'support@splitkaro.com',
+      partner_email: 'support@example.com',
       important_info: [
         {
           "Do's": [
@@ -246,11 +246,11 @@ export const EVENT_DATA = [
     _id: 'jh7tSelUPsNckl0PO2EY',
     inventory_hold_minutes: 5,
     flash_sale_text:
-      'Splitkaro Exclusive! Get 5% off on booking for a group of 5.',
+      'App Exclusive! Get 5% off on booking for a group of 5.',
     type: 'trip',
     meta: {
       languages: [],
-      partner_email: 'support@splitkaro.com',
+      partner_email: 'support@example.com',
       important_info: [
         {
           "Do's": [
@@ -362,7 +362,7 @@ export const EVENT_DATA = [
     type: 'Standup',
     meta: {
       languages: ['Hindi'],
-      partner_email: 'support@splitkaro.com',
+      partner_email: 'support@example.com',
       important_info: [
         {
           "Do's": [

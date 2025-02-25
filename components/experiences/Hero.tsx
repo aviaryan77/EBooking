@@ -5,7 +5,7 @@ import {Center} from '../../theme';
 import {Box, Text, W} from '../../theme';
 import Svg, {Stop, Defs, Rect, LinearGradient} from 'react-native-svg';
 
-const Hero = ({event, bannerHeight}:any) => {
+const Hero = ({event, bannerHeight}: any) => {
   const IMAGE_WIDTH = W * 0.92;
   const flatListRef = useRef(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -88,8 +88,8 @@ const Hero = ({event, bannerHeight}:any) => {
                 ],
               }}>
               <Box
-                my="m"
-                ml="m"
+                my={16}
+                ml={16}
                 width="auto"
                 flexDirection="row"
                 alignItems="center">

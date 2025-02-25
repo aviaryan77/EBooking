@@ -31,8 +31,8 @@ const BookTicketBottomSheet = ({
       }}>
       <FlashBanner event={event} />
       <Box
-        mt="m"
-        px="m"
+        mt={16}
+        px={16}
         width={W}
         alignItems="center"
         flexDirection="row"
@@ -42,7 +42,7 @@ const BookTicketBottomSheet = ({
             fontSize={22}
             lineHeight={24}
             variant="semiBold"
-            color="primaryBlack"
+            color="#000000"
             allowFontScaling={false}>
             {userCurrency} {currencyFormat(event?.price ?? 0)}
             <Text

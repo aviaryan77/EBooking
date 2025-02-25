@@ -3,24 +3,25 @@ import {ScrollView, Image} from 'react-native';
 // import Image from 'react-native-scalable-image';
 
 import moment from 'moment';
-// import Back from '../../svg/new/back';
-import {Box, Text, W,
-  Screen,
-  AddFieldModal,
-  ErrorHandlingModal,
+import {
+W,
+Box,
+Text,
+Screen,
+AddFieldModal,
+ErrorHandlingModal,
+ErrorHandlingModalRef,
+} from '../../theme';
+import {
+  currencyFormat,
+  sentenceCase,
+  userCurrency,
+} from '../../helpers/eventHelper';
+import {BackIcon} from '../../svg/Icons';
+import {ConfirmPay} from '../../components/experiences';
+import {GorhomBottomSheetRef} from '../../theme/GorhomBottomSheet';
 
-} from  '../../theme';
-import {currencyFormat, sentenceCase, userCurrency} from '../../helpers/eventHelper';
-import {ConfirmPay, 
-  
-} from '../../components/experiences';
-
-
-
-import { GorhomBottomSheetRef } from '../../theme/GorhomBottomSheet';
-import { BackIcon } from '../../svg/Icons';
-
-const ConfirmDetailsScreen = ({route, navigation}:any) => {
+const ConfirmDetailsScreen = ({route, navigation}: any) => {
   const {event, orderData} = route.params ?? {};
   const {
     unit_price,
@@ -31,30 +32,27 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
     final_price,
     total_discount,
     offer_applied_id,
-  } = orderData?.amount_breakup;
+  } = orderData?.amount_breakup || {}
   const quantities = orderData.quantities;
 
-  const errorRef = useRef(null);
-  const settleRef = useRef(null);
-  const mailErrorRef = useRef(null);
-  const couponErrorRef = useRef<GorhomBottomSheetRef>(null);
-
+  const errorRef = useRef<ErrorHandlingModalRef>(null);
+  const settleRef = useRef<ErrorHandlingModalRef>(null);
+  const mailErrorRef = useRef<ErrorHandlingModalRef>(null);
+  const couponErrorRef = useRef<ErrorHandlingModalRef>(null);
 
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [couponFieldVisible, setCouponFieldVisible] = useState(false);
   const [isEditMailModalVisible, setIsEditMailModalVisible] = useState(false);
   const [mailId, setMailId] = useState('example@gmail.com');
-  const [tempMailValue, setTempMailValue] = useState(
-     'example@gmail.com',
-  );
+  const [tempMailValue, setTempMailValue] = useState('example@gmail.com');
   const [hasMailError, setHasMailError] = useState(false);
 
   const Header = () => {
     return (
       <Box
-        pb="s"
-        px="m"
-        pt="m"
+        pb={8}
+        px={16}
+        pt={16}
         bg="primaryWhite"
         alignItems="center"
         flexDirection="row"
@@ -76,10 +74,8 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
     );
   };
 
- 
-
-  const SectionText = ({text}:{text:string}) => (
-    <Box py="m">
+  const SectionText = ({text}: {text: string}) => (
+    <Box py={16}>
       <Text variant="semiBold" fontSize={16} lineHeight={24}>
         {text}
       </Text>
@@ -91,10 +87,10 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
     editable,
     fieldName,
     visible = true,
-  }:any) => {
+  }: any) => {
     if (!visible) return null;
     return (
-      <Box my="s" pb="s">
+      <Box my={8} pb={8}>
         <Box flexDirection="row" justifyContent="space-between">
           <Text
             variant="semiBold"
@@ -124,10 +120,10 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
     );
   };
 
-  const TotalTicket = ({visible}:{visible:boolean}) => {
+  const TotalTicket = ({visible}: {visible: boolean}) => {
     if (!visible) return null;
 
-    var totalTicketCount = quantities.reduce(function (prev:number, cur:any) {
+    var totalTicketCount = quantities?.reduce(function (prev: number, cur: any) {
       return prev + cur.quantity;
     }, 0);
 
@@ -135,11 +131,11 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
       <Box>
         <Box>
           {quantities
-            ?.filter((type:any) => type?.quantity !== 0)
-            .map((type:any, index:number) => {
+            ?.filter((type: any) => type?.quantity !== 0)
+            ?.map((type: any, index: number) => {
               return (
                 <Box
-                  mt="s"
+                  mt={8}
                   key={type?.unit_type}
                   alignItems="center"
                   flexDirection="row"
@@ -169,9 +165,10 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
             })}
         </Box>
 
-        {quantities?.filter((type:any) => type?.quantity !== 0)?.length > 1 && (
+        {quantities?.filter((type: any) => type?.quantity !== 0)?.length >
+          1 && (
           <Box
-            mt="s"
+            mt={8}
             alignItems="center"
             flexDirection="row"
             justifyContent="space-between">
@@ -179,7 +176,7 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
               fontSize={14}
               lineHeight={20}
               variant="medium"
-              color="primaryBlack">
+              color="#000000">
               {totalTicketCount > 1
                 ? `Total ${totalTicketCount} tickets`
                 : `Total ${totalTicketCount}  ticket`}
@@ -189,8 +186,9 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
               fontSize={14}
               lineHeight={20}
               variant="medium"
-              color="primaryBlack">
-              {userCurrency}{currencyFormat(total_price)}
+              color="#000000">
+              {userCurrency}
+              {currencyFormat(total_price)}
             </Text>
           </Box>
         )}
@@ -198,7 +196,7 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
     );
   };
 
-  const isValidEmail = (email:string) => {
+  const isValidEmail = (email: string) => {
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     if (email.match(regex)) return true;
@@ -217,14 +215,13 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
       setIsEditMailModalVisible(false);
     } else {
       setHasMailError(true);
-      // @ts-ignore
-      mailErrorRef.current.showModal();
+      mailErrorRef?.current?.showModal();
     }
   };
 
   const payButtonHandler = async () => {
-     // @ts-ignore
-    settleRef.current.showBottom();
+
+    settleRef?.current?.showModal();
   };
 
   return (
@@ -236,7 +233,7 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
         contentContainerStyle={{
           paddingBottom: 200,
         }}>
-        <Box py="m" px="l" flexDirection="row">
+        <Box py={16} px={32} flexDirection="row">
           <Box
             style={{
               height: 80,
@@ -261,7 +258,7 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
             />
           </Box>
 
-          <Box flex={1} pl="m" pt="m">
+          <Box flex={1} pl={16} pt={16}>
             <Text fontSize={14} variant="semiBold">
               {event?.name}
             </Text>
@@ -274,7 +271,7 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
             </Text>
           </Box>
         </Box>
-        <Box px="l">
+        <Box px={32}>
           <SectionText text="Booking details" />
           <BookingSectionField
             fieldName="Date and time"
@@ -289,12 +286,12 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
           <BookingSectionField editable fieldName="Email Id" detail={mailId} />
         </Box>
         <Box bg="grey500" height={6}></Box>
-        <Box px="l">
+        <Box px={32}>
           <SectionText text="Pricing details" />
-          <Box my="s">
+          <Box my={8}>
             <TotalTicket visible={true} />
 
-            <Box mt="s" flexDirection="row" justifyContent="space-between">
+            <Box mt={8} flexDirection="row" justifyContent="space-between">
               <Text lineHeight={24} variant="medium" color="darkGreen">
                 Group Package
               </Text>
@@ -303,11 +300,12 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
                 variant="medium"
                 color="darkGreen"
                 allowFontScaling={false}>
-                you saved {userCurrency}{currencyFormat(total_discount)}
+                you saved {userCurrency}
+                {currencyFormat(total_discount)}
               </Text>
             </Box>
 
-            <Box flexDirection="row" justifyContent="space-between" mt="s">
+            <Box flexDirection="row" justifyContent="space-between" mt={8}>
               <Text lineHeight={24} variant="medium" color="grey200">
                 Taxes & fees
               </Text>
@@ -316,11 +314,12 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
                 color="grey200"
                 lineHeight={24}
                 allowFontScaling={false}>
-                {userCurrency}{total_tax_breakup?.value}
+                {userCurrency}
+                {total_tax_breakup?.value}
               </Text>
             </Box>
 
-            <Box mt="s" flexDirection="row" justifyContent="space-between">
+            <Box mt={8} flexDirection="row" justifyContent="space-between">
               {convenience_fee === convenience_fee_discount && (
                 <Box
                   top={9}
@@ -345,11 +344,13 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
                 color="grey200"
                 lineHeight={24}
                 allowFontScaling={false}>
-                {`${userCurrency}${convenience_fee ? convenience_fee.toFixed(2) : '200.00'}`}
+                {`${userCurrency}${
+                  convenience_fee ? convenience_fee.toFixed(2) : '200.00'
+                }`}
               </Text>
             </Box>
 
-            <Box mt="s" flexDirection="row" justifyContent="space-between">
+            <Box mt={8} flexDirection="row" justifyContent="space-between">
               <Text lineHeight={24} variant="bold" color="grey100">
                 Total
               </Text>
@@ -362,24 +363,24 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
               </Text>
             </Box>
             {total_discount > 0 && (
-              <Box px="s" my="m" bg="lightGreen">
+              <Box px={8} my={16} bg="lightGreen">
                 <Text
                   variant="medium"
                   color="darkGreen"
                   fontSize={12}
                   lineHeight={24}>
-                  Congrats! You’re saving a total of{' '}
-                  {userCurrency}{''}
-                  {currencyFormat(total_discount)} with Splitkaro
+                  Congrats! You’re saving a total of {userCurrency}
+                  {''}
+                  {currencyFormat(total_discount)} with App
                 </Text>
               </Box>
             )}
           </Box>
         </Box>
 
-        {/* <Box bg="grey500" px="l" py="s">
-          <Box my="s">
-            <Box mt="s" flexDirection="row" justifyContent="space-between">
+        {/* <Box bg="grey500" px={32} py={8}>
+          <Box my={8}>
+            <Box mt={8} flexDirection="row" justifyContent="space-between">
               <Text lineHeight={24} variant="semiBold" color="grey100">
                 Apply Coupon
               </Text>
@@ -392,15 +393,15 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
               <RestyleTextInput
                 flex={1}
                 placeholder="Enter coupon code"
-                mr="l"
+                mr={32}
                 height={50}
                 paddingLeft={0}
               />
               <Box
-                paddingHorizontal="m"
+                paddingHorizontal={16}
                 style={{backgroundColor: 'rgba(85, 99, 218, 0.12)'}}
-                borderRadius="l"
-                paddingVertical="s"
+                borderRadius={32}
+                paddingVertical={8}
                 onTouchEnd={() => couponErrorRef.current.showModal()}>
                 <Text variant="semiBold" color="primaryBlue">
                   Apply
@@ -411,9 +412,9 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
         </Box> */}
 
         {orderData?.cancellation_policy && (
-          <Box px="l">
+          <Box px={32}>
             <SectionText text="Cancellation Policy" />
-            <Box px="s">
+            <Box px={8}>
               <Text variant="medium" color="grey200" lineHeight={24}>
                 {orderData?.cancellation_policy}
               </Text>
@@ -461,18 +462,20 @@ const ConfirmDetailsScreen = ({route, navigation}:any) => {
      </BottomSheetModalProvider> */}
       <ErrorHandlingModal
         ref={couponErrorRef}
-        //@ts-ignore
-        description="Invalid Coupon code"        onPress={() => couponErrorRef.current.hideModal()}        onClose={() => couponErrorRef.current.hideModal()}
+        description="Invalid Coupon code"
+        onPress={() => couponErrorRef?.current?.hideModal()}
+        onClose={() => couponErrorRef?.current?.hideModal()}
       />
       <ErrorHandlingModal
         ref={mailErrorRef}
-        //@ts-ignore
-        description="Invalid Email Address"    onPress={() => mailErrorRef.current.hideModal()}        onClose={() => mailErrorRef.current.hideModal()}
+        description="Invalid Email Address"
+        onPress={() => mailErrorRef?.current?.hideModal()}
+        onClose={() => mailErrorRef?.current?.hideModal()}
       />
       <ErrorHandlingModal
         ref={errorRef}
-        //@ts-ignore
-        onPress={() => errorRef.current.hideModal()}  onClose={() => errorRef.current.hideModal()}
+        onPress={() => errorRef?.current?.hideModal()}
+        onClose={() => errorRef?.current?.hideModal()}
       />
     </Screen>
   );
