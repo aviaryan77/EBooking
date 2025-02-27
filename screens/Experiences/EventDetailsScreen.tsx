@@ -8,10 +8,8 @@ import {
   Hero,
   BookTicketBottomSheet,
   ReadMoreBottomSheet,
-  DatePickerModal,
 } from '../../components/experiences';
 import HTML from 'react-native-render-html';
-// import Collapsible from 'react-native-collapsible';
 import {Screen, ErrorHandlingModal, Center} from '../../theme';
 
 import LanguageIcon from '../../svg/experiences/language.svg';
@@ -21,7 +19,7 @@ import ShareOutline from '../../svg/experiences/share_outline.svg';
 import HeartOutline from '../../svg/experiences/heart_outline.svg';
 import LocationOutline from '../../svg/experiences/location_outline.svg';
 
-// import {bookTicket} from '../../helperFunctions/Api';
+
 // import CenteredSharedModal from '../../components/Shared/CenteredSharedModal';
 export const BANNER_H = 270;
 
@@ -41,26 +39,20 @@ const EventDetailsScreen = ({route, navigation}: any) => {
 
   let headerRef = useRef(null);
   let shareViewRef = useRef(null);
-  let shareCaptureRef = useRef(null);
-  const captureRef = useRef(null);
-  const shareWhatsappRef = useRef(null);
+
 
   const aboutRef = useRef(null);
-  const shareRef = useRef(null);
   const descriptionRef = useRef(null);
   const bookTicketErrorRef = useRef(null);
 
   const scrollA = useRef(new Animated.Value(0)).current;
   const [isExpectationCollapsed, setIsExpectationCollapsed] = useState(true);
-  const [bottomSheetVisible, setBottomSheetVisible] = useState(true);
 
   const [infoTitles, setInfoTitles] = useState(Object?.keys(info)?.slice(0, 1));
   const [isButtonLoading, setIsButtonLoading] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
   const isFloating = !!scrollA;
   const [isTransparent, setTransparent] = useState(isFloating);
-  const [expectationContainerHeight, setExpectationContainerHeight] =
-    useState();
+
 
   const onExpectationLoadMorePress = () => {
     if (info) {
@@ -122,7 +114,7 @@ const EventDetailsScreen = ({route, navigation}: any) => {
               <Text
                 fontSize={16}
                 lineHeight={24}
-                color="primaryBlue"
+                color="#004AAD"
                 textAlign="right"
                 numberOfLines={1}
                 variant="medium">
@@ -184,7 +176,7 @@ const EventDetailsScreen = ({route, navigation}: any) => {
                 mx={2}
                 variant="medium"
                 letterSpacing={-0.5}
-                color="primaryBlue"
+                color="#004AAD"
                 fontSize={14}>
                 See on Map
               </Text>
@@ -411,7 +403,7 @@ const EventDetailsScreen = ({route, navigation}: any) => {
         <UpwardShadow />
         <Text
           variant="semiBold"
-          color="primaryBlue"
+          color="#004AAD"
           fontSize={18}
           lineHeight={24}
           my={16}>
@@ -569,7 +561,7 @@ const EventDetailsScreen = ({route, navigation}: any) => {
 
   return (
     <>
-      <Screen pt={40} flex={1} width={W} bg="primaryWhite">
+      <Screen pt={40} flex={1} width={W} bg="#ffffff">
         <Header />
         <Animated.ScrollView
           contentContainerStyle={{paddingBottom: 200}}

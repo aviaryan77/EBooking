@@ -52,7 +52,7 @@ const BookingConfirmationScreen = ({route, navigation}:any) => {
               fontSize={18}
               lineHeight={24}
               variant="semiBold"
-              color="primaryWhite"
+              color="#ffffff"
               textTransform="capitalize">
               {dataLoading || orderStatus == 'processing'
                 ? ' Booking in process'
@@ -101,7 +101,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on App & a
 
   if (dataLoading) {
     return (
-      <Screen width={W} bg="primaryBlue">
+      <Screen width={W} bg="#004AAD">
         <>
 
           <Box alignItems="center" mt={16} px={16}>
@@ -110,7 +110,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on App & a
               variant="regular"
               fontSize={16}
               lineHeight={20}
-              color="primaryWhite">
+              color="#ffffff">
               Fetching your booking details
             </Text>
             <Text
@@ -119,7 +119,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on App & a
               lineHeight={20}
               variant="regular"
               textAlign="center"
-              color="primaryWhite">
+              color="#ffffff">
               Please wait...
             </Text>
           </Box>
@@ -130,7 +130,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on App & a
 
   if (orderStatus !== 'success' && !isRedirectedFromActivity) {
     return (
-      <Screen width={W} bg="primaryBlue">
+      <Screen width={W} bg="#004AAD">
         <>
           <Box alignItems="center" mt={16} px={16}>
             <Text
@@ -138,7 +138,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on App & a
               variant="regular"
               fontSize={16}
               lineHeight={20}
-              color="primaryWhite">
+              color="#ffffff">
               Your booking is being processed...
             </Text>
             <Text
@@ -147,7 +147,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on App & a
               lineHeight={20}
               variant="regular"
               textAlign="center"
-              color="primaryWhite">
+              color="#ffffff">
               Please wait while we confirm your booking!
             </Text>
           </Box>
@@ -158,7 +158,7 @@ ${event?.name} seems to be an exciting event. Let’s book this event on App & a
 
   //_________________main return________________//
   return (
-    <Screen width={W} bg="primaryBlue">
+    <Screen width={W} bg="#004AAD">
       <Header />
 
       <Box alignItems="center">

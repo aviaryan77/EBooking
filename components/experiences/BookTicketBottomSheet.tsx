@@ -27,6 +27,8 @@ const BookTicketBottomSheet = ({
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: '#cacaca',
         shadowOffset: {width: 0, height: -5},
       }}>
       <FlashBanner event={event} />

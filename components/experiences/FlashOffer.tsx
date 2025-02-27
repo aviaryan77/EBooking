@@ -27,7 +27,7 @@ const FlashOffer = ({offerResponse, isOfferApplied, visible = true}:any) => {
         </Box>
         {isOfferApplied ? (
           <Box flex={1}>
-            <Text fontSize={12} variant="medium" color="primaryWhite">
+            <Text fontSize={12} variant="medium" color="#ffffff">
               {` Offer Applied! You’re saving ₹${currencyFormat(
                 offerResponse?.total_discount,
               )} on this booking`}

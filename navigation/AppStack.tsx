@@ -1,6 +1,5 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import HomeScreen from '../screens/Home/HomeScreen';
 import TabNavigator from './TabNavigator';
 import {
   EventListingScreen,
@@ -10,7 +9,6 @@ import {
   BookingConfirmationScreen,
   CheckEventPaymentStatusScreen,
 } from '../screens/Experiences';
-import {EventType} from '../components/experiences/EVENT_DATA';
 
 export type AppStackParamList = {
   HomeScreen: undefined;
@@ -34,7 +32,6 @@ const AppStack: React.FC = () => {
         headerShown: false,
         ...TransitionPresets.SlideFromRightIOS,
       }}>
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="TabNavigator" component={TabNavigator} />
       <Stack.Screen name="EventListingScreen" component={EventListingScreen} />
       <Stack.Screen name="EventDetailsScreen" component={EventDetailsScreen} />

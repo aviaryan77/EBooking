@@ -230,7 +230,7 @@ export const AddFieldModal = React.forwardRef(
 
     return (
       <Modal visible={visible || isModalVisible} style={{alignItems: 'center'}}>
-        <Box p={32} width={W * 0.8} borderRadius={10} bg="primaryWhite">
+        <Box p={32} width={W * 0.8} borderRadius={10} bg="#ffffff">
           {title && (
             <Text fontSize={18} lineHeight={20} variant={'semiBold'} pb={'m'}>
               {title}
@@ -326,7 +326,7 @@ export const ErrorHandlingModal = forwardRef<
           p="l"
           width={W * 0.8}
           borderRadius={24}
-          bg="primaryWhite"
+          bg="#ffffff"
           alignItems="center"
           onTouchEnd={onPress}>
           <Box position="absolute" top={16} right={16}>

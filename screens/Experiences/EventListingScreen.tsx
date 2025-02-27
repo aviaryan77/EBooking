@@ -1,11 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {FlatList, RefreshControl, Pressable} from 'react-native';
-import Image from 'react-native-scalable-image';
+import {FlatList, Pressable, Image} from 'react-native';
 
 import moment from 'moment';
 
 import LocationSelector from '../../components/experiences/locationSelector';
-import {currencyFormat, userCurrency} from '../../helpers/eventHelper';
+import {currencyFormat} from '../../helpers/eventHelper';
 import {Box, Flex, Screen, Text, W} from '../../theme';
 import {CloseIcon} from '../../svg/Icons';
 import {EVENT_DATA} from '../../components/experiences/EVENT_DATA';
@@ -23,14 +22,7 @@ const category = [
 const EventListingScreen = ({route, navigation}: any) => {
   const [experienceList, setExperienceList] = useState(EVENT_DATA);
 
-  useEffect(() => {
-    if (route?.params?.experienceList) {
-    } else {
-    }
-  }, []);
-  const [city, setCity] = useState(
-    route?.params?.city ? route?.params?.city : '',
-  );
+  const [city, setCity] = useState<string>('');
   const locationSelectorRef = useRef<any>(null);
 
   const openLocationModal = () => {
@@ -38,61 +30,11 @@ const EventListingScreen = ({route, navigation}: any) => {
   };
 
   useEffect(() => {
-    if (city == '') {
+    if (city == '' && selectedCategory == 'all') {
       openLocationModal();
     }
   }, [city]);
 
-  const updateExperienceListing = (
-    eventId: any,
-    views: any,
-    like: any,
-    comments: any,
-    likesByUser: any,
-  ) => {
-    setExperienceList(prevList => {
-      // Create a copy of the previous experience list
-      const updatedList = [...prevList];
-
-      // Find the index of the experience with the matching eventId
-      const experienceIndex = updatedList.findIndex(
-        experience => experience.id === eventId,
-      );
-
-      // If the experience is found in the list
-      if (experienceIndex !== -1) {
-        // Create a copy of the stats object
-        const updatedStats = {...updatedList[experienceIndex].stats};
-
-        // Update the stats object with the provided views, like, and comments if they are provided
-        if (views !== null) {
-          updatedStats.views = views;
-        }
-
-        if (like !== null) {
-          updatedStats.like = like;
-        } else {
-          updatedStats.like = 0;
-        }
-
-        if (likesByUser !== null) {
-          updatedStats.likesByUser = likesByUser;
-        }
-
-        if (comments !== null) {
-          updatedStats.comments = comments;
-        }
-
-        // Update the stats object in the experience list
-        updatedList[experienceIndex].stats = updatedStats;
-      }
-
-      // Return the updated experience list
-      return updatedList;
-    });
-  };
-
-  const [refreshing, setRefreshing] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredExperienceList, setFilteredExperienceList] =
     useState(experienceList);
@@ -100,6 +42,7 @@ const EventListingScreen = ({route, navigation}: any) => {
   const userId = 'asdfggd';
 
   const onCategoryPress = (item: any) => {
+    setCity('');
     if (item === 'all') {
       setFilteredExperienceList(experienceList);
     } else {
@@ -112,26 +55,17 @@ const EventListingScreen = ({route, navigation}: any) => {
     setSelectedCategory(item?.toLowerCase());
   };
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    if (city != '') {
+  const onLocationSelect = (city: string) => {
+    setCity(city);
+    if (city === 'all') {
+      setFilteredExperienceList(experienceList);
+    } else {
+      setFilteredExperienceList(
+        experienceList.filter(
+          event => event?.location?.city?.toLowerCase() == city.toLowerCase(),
+        ),
+      );
     }
-
-    // wait(1000).then(() => setRefreshing(false));
-  }, [city]);
-
-  useEffect(() => {
-    if (city != '') {
-      setRefreshing(true);
-    }
-  }, [city]);
-
-  const openCommentInside = (item: any) => {
-    navigation.navigate('EventDetailsScreen', {
-      event: item,
-      updateExperienceListing: route?.params?.updateExperienceListing,
-      openComment: true,
-    });
   };
 
   const event_home_message_1 = 'Live Concert : Where Energy Meet Excitement';
@@ -152,14 +86,14 @@ const EventListingScreen = ({route, navigation}: any) => {
           borderRadius={16}
           alignItems="center"
           justifyContent="center"
-          borderColor="primaryBlue"
-          bg={selected ? 'primaryBlue' : 'primaryWhite'}>
+          borderColor="#004AAD"
+          bg={selected ? '#004AAD' : '#ffffff'}>
           <Text
             fontSize={14}
             lineHeight={16}
             textTransform="capitalize"
             variant={selected ? 'semiBold' : 'medium'}
-            color={selected ? 'primaryWhite' : 'primaryBlue'}>
+            color={selected ? '#ffffff' : '#004AAD'}>
             {item}
           </Text>
         </Box>
@@ -192,13 +126,11 @@ const EventListingScreen = ({route, navigation}: any) => {
               <Box width={120} justifyContent="center">
                 <Box borderRadius={12} overflow="hidden">
                   <Image
-                    width={120}
-                    source={{
-                      uri: !!event?.gallery[0]?.thumbnail
-                        ? event?.gallery[0]?.thumbnail
-                        : !!event?.gallery[0]?.url
-                        ? event?.gallery[0]?.url
-                        : 'https://firebasestorage.googleapis.com/v0/b/splitkaro-web.appspot.com/o/SplitkaroLogo.png?alt=media&token=ef424815-59c1-45bf-936a-33e4ee1045ec',
+                    source={item?.thumbnail}
+                    style={{
+                      width: 120,
+                      height: 200,
+                      resizeMode: 'stretch',
                     }}
                   />
                 </Box>
@@ -212,13 +144,13 @@ const EventListingScreen = ({route, navigation}: any) => {
                   <Box
                     px={8}
                     mb={8}
-                    bg="yellow"
+                    bg="#AA00AA"
                     borderRadius={4}
                     alignSelf="flex-start"
                     alignItems="flex-start">
                     <Text
                       variant="regular"
-                      color="primaryWhite"
+                      color="#ffffff"
                       lineHeight={20}
                       textTransform="capitalize">
                       {event?.type}
@@ -257,14 +189,14 @@ const EventListingScreen = ({route, navigation}: any) => {
                 </Box>
 
                 <Box>
-                  {/* <Text
-                variant="medium"
-                fontSize={12}
-                lineHeight={14}
-                color="primaryRed"
-                mt={16}>
-                Only {item?.inventory} tickets remaining
-              </Text> */}
+                  <Text
+                    variant="medium"
+                    fontSize={12}
+                    lineHeight={14}
+                    color="primaryRed"
+                    mt={16}>
+                    Only {item?.inventory} tickets remaining
+                  </Text>
                   <Text mt={8} fontSize={16} variant="semiBold">
                     ₹{currencyFormat(item?.price)}{' '}
                     <Text fontSize={14} variant="regular">
@@ -296,7 +228,7 @@ const EventListingScreen = ({route, navigation}: any) => {
 
   const renderEmptyComponent = () => (
     <Box alignItems="center" mt={32}>
-      <Text fontSize={14} lineHeight={16} variant="medium" color="primaryBlue">
+      <Text fontSize={14} lineHeight={16} variant="medium" color="#004AAD">
         More events coming soon!
       </Text>
     </Box>
@@ -304,7 +236,7 @@ const EventListingScreen = ({route, navigation}: any) => {
 
   //_________________main return________________//
   return (
-    <Screen flex={1} width={W} bg="primaryBlue">
+    <Screen flex={1} width={W} bg="#004AAD">
       <Box flex={1}>
         <Box width={'100%'} top={0} mt={32} px={32} mb={32}>
           <Flex justify="space-between">
@@ -314,7 +246,11 @@ const EventListingScreen = ({route, navigation}: any) => {
               onPress={() => navigation.goBack()}
             />
             <Box>
-              <LocationSelector ref={locationSelectorRef} setCity={setCity} />
+              <LocationSelector
+                ref={locationSelectorRef}
+                setCity={onLocationSelect}
+                city={city}
+              />
             </Box>
           </Flex>
 
@@ -323,28 +259,28 @@ const EventListingScreen = ({route, navigation}: any) => {
             lineHeight={24}
             variant="semiBold"
             paddingVertical={8}
-            color={'primaryWhite'}>
+            color={'#ffffff'}>
             {event_home_message_1}
           </Text>
           <Text
             opacity={0.75}
             variant="regular"
             letterSpacing={-0.3}
-            color={'primaryWhite'}
+            color={'#ffffff'}
             style={{maxWidth: '90%'}}>
             {event_home_message_2}
           </Text>
         </Box>
 
-        <Box width={W} borderRadius={24} bg="primaryWhite" minHeight={700}>
-          {/* <FlatList
+        <Box width={W} borderRadius={24} bg="#ffffff" minHeight={700}>
+          <FlatList
             horizontal
             data={category}
             keyExtractor={item => item}
             renderItem={renderCategory}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{paddingLeft: 16}}
-          /> */}
+          />
 
           <FlatList
             data={filteredExperienceList}
@@ -352,9 +288,6 @@ const EventListingScreen = ({route, navigation}: any) => {
             keyExtractor={item => item?._id}
             ListEmptyComponent={renderEmptyComponent}
             contentContainerStyle={{paddingBottom: 400}}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
           />
         </Box>
       </Box>

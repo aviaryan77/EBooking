@@ -13,15 +13,10 @@ import Bangalore from '../../svg/cities/bangalore.svg';
 import Mumbai from '../../svg/cities/mumbai.svg';
 import Chennai from '../../svg/cities/chennai.svg';
 import Kolkata from '../../svg/cities/kolkata.svg';
+import {Button, COLORS, Flex} from '../../theme';
+import {CloseIcon} from '../../svg/Icons';
 
-const cities = [
-  'Gurgaon',
-  'Delhi',
-  'Bangalore',
-  'Mumbai',
-  'Chennai',
-  'Kolkata',
-];
+const cities = ['Delhi', 'Bangalore', 'Mumbai'];
 
 // Function to import SVG dynamically
 const importSvg = (name: any) => {
@@ -42,92 +37,71 @@ const importSvg = (name: any) => {
       return null;
   }
 };
-const LocationSelector = forwardRef(({setCity}: {setCity: any}, ref) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedCity, setSelectedCity] = useState('');
+const LocationSelector = forwardRef(
+  ({setCity, city}: {setCity: any; city: string}, ref) => {
+    const [modalVisible, setModalVisible] = useState(false);
 
-  useEffect(() => {
-    loadSelectedCity();
-  }, []);
+    useImperativeHandle(ref, () => ({
+      openModal: () => {
+        setModalVisible(true);
+      },
+    }));
 
-  useEffect(() => {
-    if (selectedCity != '') {
-      setCity(selectedCity);
-    }
-  }, [selectedCity]);
-  const loadSelectedCity = async () => {
-    try {
-      // const storedCity = await AsyncStorage.getItem('selectedCity');
-      const storedCity = 'kolkata';
-      if (storedCity) {
-        setSelectedCity(storedCity);
-      }
-    } catch (error) {
-      console.log('Error loading selected city:', error);
-    }
-  };
+    const handleCitySelect = (city: any) => {
+      setModalVisible(false);
+      setCity(city);
+    };
 
-  useImperativeHandle(ref, () => ({
-    openModal: () => {
-      setModalVisible(true);
-    },
-  }));
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setModalVisible(true)}>
+          {!city ? <Location height={18} width={18} /> : <>{importSvg(city)}</>}
+          <Text style={styles.buttonText}>
+            {city === '' ? 'Select City' : city}
+          </Text>
+        </TouchableOpacity>
 
-  const saveSelectedCity = async (city: any) => {
-    try {
-      // await AsyncStorage.setItem('selectedCity', city);
-    } catch (error) {
-      console.log('Error saving selected city:', error);
-    }
-  };
-
-  const handleCitySelect = (city: any) => {
-    setSelectedCity(city);
-    setModalVisible(false);
-    saveSelectedCity(city);
-  };
-
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => setModalVisible(true)}>
-        {1 == 1 ? (
-          <Location height={18} width={18} />
-        ) : (
-          <>{importSvg(selectedCity)}</>
-        )}
-        <Text style={styles.buttonText}>
-          {selectedCity === '' ? 'Select City' : selectedCity}
-        </Text>
-      </TouchableOpacity>
-
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            {cities.map(city => (
-              <TouchableOpacity
-                key={city}
-                style={styles.cityItem}
-                onPress={() => handleCitySelect(city)}>
-                {importSvg(city) && (
-                  <View style={styles.cityIconContainer}>
-                    {importSvg(city)}
-                  </View>
-                )}
-                <Text style={styles.cityText}>{city}</Text>
-              </TouchableOpacity>
-            ))}
+        <Modal
+          visible={modalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => setModalVisible(false)}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Flex justify="space-between">
+                <Text
+                  style={{
+                    ...styles.cityText,
+                    color: COLORS.primary,
+                    marginBottom: 10,
+                    fontSize: 20,
+                  }}>
+                  Choose Location
+                </Text>
+                <CloseIcon onPress={() => setModalVisible(false)} />
+              </Flex>
+              {cities.map(city => (
+                <TouchableOpacity
+                  key={city}
+                  style={styles.cityItem}
+                  onPress={() => handleCitySelect(city)}>
+                  {importSvg(city) && (
+                    <View style={styles.cityIconContainer}>
+                      {importSvg(city)}
+                    </View>
+                  )}
+                  <Text style={styles.cityText}>{city}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
-      </Modal>
-    </View>
-  );
-});
+        </Modal>
+      </View>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -159,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    width: '80%',
+    width: '85%',
     maxHeight: '70%',
   },
   cityItem: {

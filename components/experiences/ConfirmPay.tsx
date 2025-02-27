@@ -38,7 +38,7 @@ const ConfirmPay = ({totalAmount, onConfirmPress, buttonLoading}:any) => {
         </Box>
         <Button
           width={W * 0.4}
-          title="Pay now"
+          title="Book now"
           onPress={()=>{
             onConfirmPress();
           }}

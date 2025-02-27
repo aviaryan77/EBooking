@@ -63,3 +63,4 @@ export const updateProfileApi = ({data}: {data: UserType}): Promise<any> => {
     }, 1000);
   });
 };
+

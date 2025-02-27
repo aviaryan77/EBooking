@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Flex, Screen, Text, VStack} from '../../theme';
+import {Flex, Screen, Text, VStack} from '../../theme';
 import {ScrollView} from 'react-native';
 
 const RecentTabScreen = () => {

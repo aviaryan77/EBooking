@@ -2,9 +2,11 @@ import {combineReducers} from 'redux';
 import axios from 'axios';
 
 import auth from './auth/reducer';
+import bookings from './bookings/reducer';
 
 const appReducer = combineReducers({
   auth,
+  bookings,
 });
 
 // clear all data in redux store

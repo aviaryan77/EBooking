@@ -172,7 +172,7 @@ const CheckEventPaymentStatusScreen = ({navigation, route}:any) => {
               fontSize={15}
               lineHeight={18}
               variant="semiBold"
-              color="primaryBlue"
+              color="#004AAD"
               textDecorationStyle="solid"
               textDecorationLine="underline">
               View wallet

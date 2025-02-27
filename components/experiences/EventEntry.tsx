@@ -197,13 +197,7 @@ const EventEntry = ({visible}: any) => {
                 borderBottomRightRadius: 10,
               }}>
               <Image
-                source={{
-                  uri: !!item?.gallery[0]?.thumbnail
-                    ? item?.gallery[0]?.thumbnail
-                    : !!item?.gallery[0]?.url
-                    ? item?.gallery[0]?.url
-                    : 'https://firebasestorage.googleapis.com/v0/b/splitkaro-web.appspot.com/o/SplitkaroLogo.png?alt=media&token=ef424815-59c1-45bf-936a-33e4ee1045ec',
-                }}
+                source={item?.thumbnail}
                 style={{
                   width: 120,
                   height: 200,

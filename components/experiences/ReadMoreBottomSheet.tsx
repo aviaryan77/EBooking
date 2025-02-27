@@ -46,7 +46,7 @@ const ReadMoreBottomSheet = React.forwardRef((props:any, ref) => {
         ref={animationRef}
         animation={'fadeInUpBig'}
         duration={500}>
-        <Box pt={16} width={W} bg="primaryWhite">
+        <Box pt={16} width={W} bg="#ffffff">
           <Pressable onPressIn={() => hideWithAnimation()}>
             <Box
               mb={16}
@@ -59,7 +59,7 @@ const ReadMoreBottomSheet = React.forwardRef((props:any, ref) => {
             <Box position="absolute" right={20} top={0}>
               <Text
                 variant={'semiBold'}
-                color={'primaryBlue'}
+                color={'#004AAD'}
                 onPress={() => hideWithAnimation()}>
                 Close
               </Text>

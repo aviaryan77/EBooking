@@ -100,14 +100,16 @@ const Hero = ({event, bannerHeight}: any) => {
                     borderRadius: 14,
                     overflow: 'hidden',
                     alignItems: 'center',
+
                   }}>
                   <Animated.Image
-                    source={{uri: item?.url}}
+                    source={item?.url}
+  
                     style={{
                       width: IMAGE_WIDTH,
                       height: IMAGE_WIDTH * 0.66,
                       borderRadius: 10,
-                      resizeMode: 'contain',
+                      resizeMode: 'cover',
                       transform: [{translateX}],
                     }}
                   />
@@ -129,7 +131,7 @@ const Hero = ({event, bannerHeight}: any) => {
                         variant="regular"
                         fontSize={12}
                         lineHeight={14}
-                        color="primaryWhite">{`${index + 1}/${
+                        color="#ffffff">{`${index + 1}/${
                         event?.gallery?.length
                       }`}</Text>
                     </Animated.View>
@@ -146,7 +148,7 @@ const Hero = ({event, bannerHeight}: any) => {
           lineHeight={24}
           textAlign="left"
           variant="semiBold"
-          color="primaryWhite"
+          color="#ffffff"
           style={{
             textShadowColor: 'black',
             textShadowOffset: {width: 1, height: 2},

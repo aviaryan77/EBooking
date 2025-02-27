@@ -2,18 +2,28 @@ export const EVENT_DATA = [
   {
     partner_id: '',
     bulk_booking_offers: [],
-    price_breakup: {
-      single: {
+    price_breakup: [
+      {
         convenience_fee: 10,
-        unit_price: 999,
+        unit_price: 1000,
         tax_breakup: {
           value: 0,
         },
         unit_quantity: 1,
         convenience_fee_discount: 100,
-        type: 'single',
+        type: 'male',
       },
-    },
+      {
+        convenience_fee: 0,
+        unit_price: 800,
+        tax_breakup: {
+          value: 0,
+        },
+        unit_quantity: 1,
+        convenience_fee_discount: 0,
+        type: 'female',
+      },
+    ],
     status: 'live',
     partner_name: 'TICKETING',
     name: 'THAIKKUDAM BRIDGE, Live concert @ Phoenix',
@@ -26,14 +36,11 @@ export const EVENT_DATA = [
       city: 'Bangalore',
       address: 'Phoenix Marketcity, Bangalore',
     },
-    redirect_link:
-      'https://theticketing.in/book/RzDYxoQqbGyPjY5fK6O5?utm_source=Splitkaro&utm_medium=Banner+&utm_campaign=Thaikudum_Bridage&utm_id=Splitkaro_App_Listing',
-    thumbnail:
-      'https://firebasestorage.googleapis.com/v0/b/splitkaro-new.appspot.com/o/events%2Fpartners%2Fticketing%2FUntitled-1.jpg?alt=media&token=eee877e0-d59c-4af5-89e0-aee752379445',
-    start_date: '2023-08-19T13:30:00.000Z',
+    thumbnail: require('../../assets/events/11.png'),
+    start_date: '2025-03-01T13:30:00.000Z',
     duration: '5 hours',
-    inventory: 300,
-    end_date: '2023-08-19T18:25:00.000Z',
+    inventory: 30,
+    end_date: '2025-02-28T18:25:00.000Z',
     _id: 'zrQoXIzWXJEnCnTwUQ5M',
     inventory_hold_minutes: 5,
     flash_sale_text: 'powered by The Ticketing',
@@ -56,15 +63,20 @@ export const EVENT_DATA = [
         },
       ],
     },
-    max_capacity: 3000,
-    price: 999,
+    max_capacity: 30,
+    price: 1000,
     inventory_on_hold: 0,
+    
     gallery: [
       {
-        thumbnail:
-          'https://firebasestorage.googleapis.com/v0/b/splitkaro-new.appspot.com/o/events%2Fpartners%2Fticketing%2FUntitled-1.jpg?alt=media&token=eee877e0-d59c-4af5-89e0-aee752379445',
-        url: 'https://firebasestorage.googleapis.com/v0/b/splitkaro-new.appspot.com/o/events%2Fpartners%2Fticketing%2Ffinal%201920%20(3).png?alt=media&token=e19f1fef-f570-4820-abc1-3fec51d293c6',
-        caption: 'THAIKKUDAM BRIDGE',
+        thumbnail: require('../../assets/events/1.png'),
+        url: require('../../assets/events/1.png'),
+        caption: 'Cig',
+      },
+      {
+        thumbnail: require('../../assets/events/2.png'),
+        url: require('../../assets/events/2.png'),
+        caption: 'Mega',
       },
     ],
     description:
@@ -97,12 +109,13 @@ export const EVENT_DATA = [
       like: 1,
     },
     id: 'zrQoXIzWXJEnCnTwUQ5M',
+  
   },
   {
     partner_id: '',
     bulk_booking_offers: [],
-    price_breakup: {
-      single: {
+    price_breakup: [
+      {
         convenience_fee: 0,
         unit_price: 1237,
         tax_breakup: {
@@ -112,7 +125,7 @@ export const EVENT_DATA = [
         convenience_fee_discount: 0,
         type: 'single',
       },
-    },
+    ],
     status: 'live',
     partner_name: '',
     name: 'Wonderla Amusement Park Bangalore',
@@ -120,23 +133,19 @@ export const EVENT_DATA = [
       segments: ['events', 'IWlhPfTCIebdYcyOBjNZ'],
     },
     location: {
-      maps_link:
-        'https://www.google.com/maps/search/?api=1&query=12.834609985351562,77.40101623535156',
-      city: 'Punjab',
+      maps_link: 'https://www.google.com/maps/search/?api=1&query=12,77',
+      city: 'Mumbai',
       address: 'Jadenahalli, Mysore Road, Bengaluru, Karnataka 562109, India',
     },
-    redirect_link:
-      'https://in.bookmyshow.com/activities/wonderla-amusement-park-bangalore/ET00063785',
-    thumbnail:
-      'https://assets-in.bmscdn.com/nmcms/events/banner/mobile/media-mobile-wonderla-amusement-park-bangalore-1-2022-1-28-t-12-45-26.jpg',
-    start_date: '2023-06-01T05:30:00.000Z',
+    thumbnail: require('../../assets/events/13.png'),
+    start_date: '2025-03-01T05:30:00.000Z',
     duration: '7 hours',
     inventory: 10,
-    end_date: '2023-06-30T12:30:00.000Z',
+    end_date: '2025-03-02T12:30:00.000Z',
     _id: 'IWlhPfTCIebdYcyOBjNZ',
     inventory_hold_minutes: 0,
     flash_sale_text: '',
-    type: 'Adventure',
+    type: 'Music',
     meta: {
       languages: [],
       partner_email: 'support@example.com',
@@ -178,28 +187,19 @@ export const EVENT_DATA = [
         '60e1ba1563335a6285267ce1',
         '633ea84b25f6c9035aa857a3',
         '633fa9e903b577c605ef2613',
-
-        '63ce92cfa5bd10b9932ff4da',
-        '63a5fc0c31e8b955c778b4a7',
-        '64a958b10abd9d1f4cbc5ee4',
-
-        '63305335fff9fc2cb03b764a',
-        '65900a926bc7f592c21daca3',
       ],
       like: 1,
     },
     gallery: [
       {
-        thumbnail:
-          'https://assets-in.bmscdn.com/nmcms/events/banner/mobile/media-mobile-wonderla-amusement-park-bangalore-1-2022-1-28-t-12-45-26.jpg',
-        url: 'https://assets-in.bmscdn.com/nmcms/events/banner/mobile/media-mobile-wonderla-amusement-park-bangalore-1-2022-1-28-t-12-45-26.jpg',
+        thumbnail: require('../../assets/events/3.png'),
+        url: require('../../assets/events/3.png'),
         caption:
           'Looking for fun things to do in Bangalore today? There’s no better place to experience something new together than Wonderla Bengaluru!',
       },
       {
-        thumbnail:
-          'https://assets-in.bmscdn.com/nmcms/events/banner/mobile/media-mobile-wonderla-amusement-park-bangalore-1-2022-1-28-t-12-45-26.jpg',
-        url: 'https://assets-in.bmscdn.com/nmcms/events/banner/mobile/media-mobile-wonderla-amusement-park-bangalore-1-2022-1-28-t-12-45-26.jpg',
+        thumbnail: require('../../assets/events/4.png'),
+        url: require('../../assets/events/4.png'),
         caption:
           'Looking for fun things to do in Bangalore today? There’s no better place to experience something new together than Wonderla Bengaluru!',
       },
@@ -212,8 +212,8 @@ export const EVENT_DATA = [
   {
     partner_id: 'delhifoodnest',
     bulk_booking_offers: [],
-    price_breakup: {
-      single: {
+    price_breakup: [
+    {
         convenience_fee: 10,
         unit_price: 7999,
         tax_breakup: {
@@ -221,9 +221,9 @@ export const EVENT_DATA = [
         },
         unit_quantity: 1,
         convenience_fee_discount: 100,
-        type: 'single or group',
+        type: 'single',
       },
-    },
+    ],
     status: 'live',
     partner_name: 'delhifoodnest',
     name: 'Bir Billing Group Trip',
@@ -232,22 +232,18 @@ export const EVENT_DATA = [
     },
     location: {
       maps_link: 'https://goo.gl/maps/AeboRhcf6rbM3KJx6',
-      city: 'Punjab',
+      city: 'Mumbai',
       address: 'Delhi',
     },
-    redirect_link:
-      'https://api.whatsapp.com/send/?phone=919582676279&text=Hey%21+I+got+to+know+about+you+via+Splitkaro+and+I+want+to+book+my+seat+for+Bir+Billing+group+trip&type=phone_number',
-    thumbnail:
-      'https://firebasestorage.googleapis.com/v0/b/splitkaro-new.appspot.com/o/Holidays%20Trip%20And%20Tour%20Travel%20Agent%20Promo%20Flyer.jpg?alt=media&token=109c3155-62cc-45a1-8fe1-843d57ef5490&_gl=1*18demai*_ga*OTA4ODEwMDc5LjE2Mzk1NjA4NDA.*_ga_CW55HF8NVT*MTY4NjY1MTk2My4xOS4xLjE2ODY2NTE5ODYuMC4wLjA.',
+    thumbnail: require('../../assets/events/14.png'),
     start_date: '2023-07-07T03:30:00.000Z',
     duration: '3 days',
     inventory: 100,
     end_date: '2023-07-09T16:00:00.000Z',
     _id: 'jh7tSelUPsNckl0PO2EY',
     inventory_hold_minutes: 5,
-    flash_sale_text:
-      'App Exclusive! Get 5% off on booking for a group of 5.',
-    type: 'trip',
+    flash_sale_text: 'App Exclusive! Get 5% off on booking for a group of 5.',
+    type: 'LifeStyle',
     meta: {
       languages: [],
       partner_email: 'support@example.com',
@@ -274,9 +270,8 @@ export const EVENT_DATA = [
     inventory_on_hold: 0,
     gallery: [
       {
-        thumbnail:
-          'https://firebasestorage.googleapis.com/v0/b/splitkaro-new.appspot.com/o/Holidays%20Trip%20And%20Tour%20Travel%20Agent%20Promo%20Flyer.jpg?alt=media&token=109c3155-62cc-45a1-8fe1-843d57ef5490&_gl=1*18demai*_ga*OTA4ODEwMDc5LjE2Mzk1NjA4NDA.*_ga_CW55HF8NVT*MTY4NjY1MTk2My4xOS4xLjE2ODY2NTE5ODYuMC4wLjA.',
-        url: 'https://firebasestorage.googleapis.com/v0/b/splitkaro-new.appspot.com/o/Holidays%20Trip%20And%20Tour%20Travel%20Agent%20Promo%20Flyer.jpg?alt=media&token=109c3155-62cc-45a1-8fe1-843d57ef5490&_gl=1*18demai*_ga*OTA4ODEwMDc5LjE2Mzk1NjA4NDA.*_ga_CW55HF8NVT*MTY4NjY1MTk2My4xOS4xLjE2ODY2NTE5ODYuMC4wLjA.',
+        thumbnail: require('../../assets/events/4.png'),
+        url: require('../../assets/events/4.png'),
         caption: 'Bir Billing Group Trip',
       },
     ],
@@ -324,8 +319,7 @@ export const EVENT_DATA = [
   {
     partner_id: '',
     bulk_booking_offers: [],
-    price_breakup: {
-      single: {
+    price_breakup: [{
         convenience_fee: 0,
         unit_price: 779,
         tax_breakup: {
@@ -335,7 +329,17 @@ export const EVENT_DATA = [
         convenience_fee_discount: 0,
         type: 'single',
       },
-    },
+       {
+        convenience_fee: 0,
+        unit_price: 1400,
+        tax_breakup: {
+          value: 0,
+        },
+        unit_quantity: 2,
+        convenience_fee_discount: 0,
+        type: 'couple',
+      },
+    ],
     status: 'live',
     partner_name: '',
     name: 'Vipul Goyal Live',
@@ -345,13 +349,12 @@ export const EVENT_DATA = [
     location: {
       maps_link:
         'https://www.google.com/maps/search/?api=1&query=12.965904235839844,77.71807098388672',
-      city: 'Punjab',
+      city: 'Delhi',
       address: 'BOHO Rooftop Restaurant & Bar: Bengaluru',
     },
     redirect_link:
       'https://in.bookmyshow.com/events/vipul-goyal-live/ET00346737',
-    thumbnail:
-      'https://in.bmscdn.com/Events/Mobile/ET00346737.jpg?202305201429',
+    thumbnail: require('../../assets/events/15.png'),
     start_date: '2023-07-01T11:45:00.000Z',
     duration: '2 hours',
     inventory: 10,
@@ -359,7 +362,7 @@ export const EVENT_DATA = [
     _id: '3tIrxVyx0VYjxbtReSLv',
     inventory_hold_minutes: 0,
     flash_sale_text: '',
-    type: 'Standup',
+    type: 'Music',
     meta: {
       languages: ['Hindi'],
       partner_email: 'support@example.com',
@@ -385,9 +388,6 @@ export const EVENT_DATA = [
         '60e1b9f663335a62839de449',
         '634f3898516e9452b97f80e4',
         '633eb16cd00490f166dbd17a',
-        '6159a83d192c1431c39707d5',
-        '633ea84b25f6c9035aa857a3',
-        '60e1ba1563335a6285267ce1',
       ],
       views: 473,
       viewsByUser: [
@@ -402,15 +402,13 @@ export const EVENT_DATA = [
     },
     gallery: [
       {
-        thumbnail:
-          'https://in.bmscdn.com/Events/Mobile/ET00346737.jpg?202305201429',
-        url: 'https://in.bmscdn.com/Events/Mobile/ET00346737.jpg?202305201429',
+        thumbnail: require('../../assets/events/5.png'),
+        url: require('../../assets/events/5.png'),
         caption: 'Caution: This is a riot..a laugh riot!',
       },
       {
-        thumbnail:
-          'https://in.bmscdn.com/Events/Mobile/ET00346737.jpg?202305201429',
-        url: "https://firebasestorage.googleapis.com/v0/b/splitkaro-new.appspot.com/o/events%2Fpartners%2Fnirulas_blr%2FNirula's%20HP.png?alt=media&token=8dd3e5f2-1781-405a-900b-22bdfff9398c",
+        thumbnail: require('../../assets/events/6.png'),
+        url: require('../../assets/events/6.png'),
         caption: 'Caution: This is a riot..a laugh riot!',
       },
     ],
@@ -423,18 +421,8 @@ export const EVENT_DATA = [
 export interface EventType {
   partner_id: string;
   bulk_booking_offers: any[];
-  price_breakup: {
-    single: {
-      convenience_fee: number;
-      unit_price: number;
-      tax_breakup: {
-        value: number;
-      };
-      unit_quantity: number;
-      convenience_fee_discount: number;
-      type: string;
-    };
-  };
+  price_breakup:PriceBreakupType[]
+;  
   status: string;
   partner_name: string;
   name: string;
@@ -491,4 +479,17 @@ export interface EventType {
     like: number;
   };
   id: string;
+  booking_id?: string;
+}
+
+
+export interface PriceBreakupType {
+  convenience_fee: number;
+  unit_price: number;
+  tax_breakup: {
+    value: number;
+  };
+  unit_quantity: number;
+  convenience_fee_discount: number;
+  type: 'single' | 'couple' | 'male' |'female'
 }

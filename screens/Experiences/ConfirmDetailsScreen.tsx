@@ -4,13 +4,13 @@ import {ScrollView, Image} from 'react-native';
 
 import moment from 'moment';
 import {
-W,
-Box,
-Text,
-Screen,
-AddFieldModal,
-ErrorHandlingModal,
-ErrorHandlingModalRef,
+  W,
+  Box,
+  Text,
+  Screen,
+  AddFieldModal,
+  ErrorHandlingModal,
+  ErrorHandlingModalRef,
 } from '../../theme';
 import {
   currencyFormat,
@@ -20,32 +20,32 @@ import {
 import {BackIcon} from '../../svg/Icons';
 import {ConfirmPay} from '../../components/experiences';
 import {GorhomBottomSheetRef} from '../../theme/GorhomBottomSheet';
+import {PriceBreakupType} from '../../components/experiences/EVENT_DATA';
+import Log from '../../services/Log';
+import {useAppDispatch} from '../../store/ReduxHook';
+import {updateMyBookings} from '../../store/actions';
 
 const ConfirmDetailsScreen = ({route, navigation}: any) => {
-  const {event, orderData} = route.params ?? {};
-  const {
-    unit_price,
-    total_price,
-    total_tax_breakup,
-    convenience_fee,
-    convenience_fee_discount,
-    final_price,
-    total_discount,
-    offer_applied_id,
-  } = orderData?.amount_breakup || {}
-  const quantities = orderData.quantities;
+  const dispatch = useAppDispatch();
+  const {event, memberCount, offerResponse} = route.params ?? {};
+
+  const quantities = memberCount
+    ? Object.keys(memberCount).map(key => {
+        return {
+          unit_type: key,
+          quantity: memberCount[key],
+        };
+      })
+    : [];
 
   const errorRef = useRef<ErrorHandlingModalRef>(null);
   const settleRef = useRef<ErrorHandlingModalRef>(null);
-  const mailErrorRef = useRef<ErrorHandlingModalRef>(null);
   const couponErrorRef = useRef<ErrorHandlingModalRef>(null);
 
   const [isButtonLoading, setIsButtonLoading] = useState(false);
-  const [couponFieldVisible, setCouponFieldVisible] = useState(false);
-  const [isEditMailModalVisible, setIsEditMailModalVisible] = useState(false);
   const [mailId, setMailId] = useState('example@gmail.com');
-  const [tempMailValue, setTempMailValue] = useState('example@gmail.com');
-  const [hasMailError, setHasMailError] = useState(false);
+
+  type MemberType = 'single' | 'male' | 'female' | 'couple';
 
   const Header = () => {
     return (
@@ -53,7 +53,7 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
         pb={8}
         px={16}
         pt={16}
-        bg="primaryWhite"
+        bg="#ffffff"
         alignItems="center"
         flexDirection="row"
         justifyContent="space-between">
@@ -99,16 +99,6 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
             lineHeight={24}>
             {fieldName}
           </Text>
-          {editable && (
-            <Text
-              lineHeight={24}
-              color="grey100"
-              variant="semiBold"
-              textDecorationLine="underline"
-              onPress={() => setIsEditMailModalVisible(true)}>
-              Edit
-            </Text>
-          )}
         </Box>
         <Box flexDirection="row" justifyContent="space-between">
           <Text variant="medium" color="grey200" lineHeight={24}>
@@ -123,20 +113,27 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
   const TotalTicket = ({visible}: {visible: boolean}) => {
     if (!visible) return null;
 
-    var totalTicketCount = quantities?.reduce(function (prev: number, cur: any) {
+    var totalTicketCount = quantities?.reduce(function (
+      prev: number,
+      cur: any,
+    ) {
       return prev + cur.quantity;
-    }, 0);
+    },
+    0);
 
     return (
       <Box>
         <Box>
-          {quantities
-            ?.filter((type: any) => type?.quantity !== 0)
-            ?.map((type: any, index: number) => {
+          {event.price_breakup
+            ?.filter(
+              (type: PriceBreakupType) => memberCount[type.type as any] !== 0,
+            )
+
+            ?.map((type: PriceBreakupType, index: number) => {
               return (
                 <Box
                   mt={8}
-                  key={type?.unit_type}
+                  key={type?.type}
                   alignItems="center"
                   flexDirection="row"
                   justifyContent="space-between">
@@ -145,9 +142,9 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
                     color="grey200"
                     lineHeight={24}
                     allowFontScaling={false}>
-                    {` ${type?.quantity} ${sentenceCase(type?.unit_type)} x₹${
-                      event?.price_breakup[type?.unit_type]?.unit_price
-                    }`}
+                    {` ${memberCount[type.type as any]} ${sentenceCase(
+                      type?.type,
+                    )} x₹${type?.unit_price}`}
                   </Text>
 
                   <Text
@@ -156,8 +153,7 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
                     lineHeight={24}
                     allowFontScaling={false}>
                     {`${userCurrency}${currencyFormat(
-                      type?.quantity *
-                        event?.price_breakup[type?.unit_type]?.unit_price,
+                      memberCount[type.type as any] * type?.unit_price,
                     )}`}
                   </Text>
                 </Box>
@@ -188,7 +184,7 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
               variant="medium"
               color="#000000">
               {userCurrency}
-              {currencyFormat(total_price)}
+              {currencyFormat(offerResponse?.total_price)}
             </Text>
           </Box>
         )}
@@ -196,36 +192,34 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
     );
   };
 
-  const isValidEmail = (email: string) => {
-    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-    if (email.match(regex)) return true;
-    else return false;
-  };
-
-  const onMailCancel = () => {
-    setTempMailValue(mailId);
-    setIsEditMailModalVisible(false);
-  };
-  const onMailSave = () => {
-    if (isValidEmail(tempMailValue)) {
-      setHasMailError(false);
-      setMailId(tempMailValue);
-      setTempMailValue(tempMailValue);
-      setIsEditMailModalVisible(false);
-    } else {
-      setHasMailError(true);
-      mailErrorRef?.current?.showModal();
-    }
-  };
-
   const payButtonHandler = async () => {
-
-    settleRef?.current?.showModal();
+    dispatch(
+      updateMyBookings({
+        data: {
+          ...event,
+          event_id: event.id,
+          quantity: quantities,
+          email: mailId,
+          price: offerResponse.final_price,
+          total_price: offerResponse.final_price,
+          payment_status: 'pending',
+          payment_id: '',
+          payment_mode: 'online',
+          payment_date: '',
+          payment_expiry: '',
+          booking_id: Math.floor(Math.random() * 1000000).toString(),
+        },
+        callback: (response: any) => {
+          navigation.navigate('TabNavigator', {
+            screen: 'Bookings',
+          });
+        },  
+      }),
+    );
   };
 
   return (
-    <Screen flex={1} width={W} bg="primaryWhite">
+    <Screen flex={1} width={W} bg="#ffffff">
       <Header />
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -242,18 +236,12 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
               overflow: 'hidden',
             }}>
             <Image
-              source={{
-                uri: !!event?.gallery[0]?.thumbnail
-                  ? event?.gallery[0]?.thumbnail
-                  : !!event?.gallery[0]?.url
-                  ? event?.gallery[0]?.url
-                  : 'https://firebasestorage.googleapis.com/v0/b/splitkaro-web.appspot.com/o/SplitkaroLogo.png?alt=media&token=ef424815-59c1-45bf-936a-33e4ee1045ec',
-              }}
+              source={event?.gallery[0]?.thumbnail}
               style={{
                 height: 80,
                 width: 120,
                 borderRadius: 10,
-                resizeMode: 'contain',
+                resizeMode: 'cover',
               }}
             />
           </Box>
@@ -281,7 +269,7 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
           />
           <BookingSectionField
             fieldName="No. of tickets"
-            detail={`${orderData?.total_quantity} tickets `}
+            detail={`${offerResponse?.total_quantity} tickets `}
           />
           <BookingSectionField editable fieldName="Email Id" detail={mailId} />
         </Box>
@@ -301,7 +289,7 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
                 color="darkGreen"
                 allowFontScaling={false}>
                 you saved {userCurrency}
-                {currencyFormat(total_discount)}
+                {currencyFormat(offerResponse?.total_discount)}
               </Text>
             </Box>
 
@@ -315,12 +303,13 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
                 lineHeight={24}
                 allowFontScaling={false}>
                 {userCurrency}
-                {total_tax_breakup?.value}
+                {offerResponse.total_tax_breakup?.value ?? 0}
               </Text>
             </Box>
 
             <Box mt={8} flexDirection="row" justifyContent="space-between">
-              {convenience_fee === convenience_fee_discount && (
+              {offerResponse?.convenience_fee ===
+                offerResponse?.convenience_fee_discount && (
                 <Box
                   top={9}
                   right={0}
@@ -345,7 +334,9 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
                 lineHeight={24}
                 allowFontScaling={false}>
                 {`${userCurrency}${
-                  convenience_fee ? convenience_fee.toFixed(2) : '200.00'
+                  offerResponse.convenience_fee
+                    ? offerResponse.convenience_fee.toFixed(2)
+                    : '200.00'
                 }`}
               </Text>
             </Box>
@@ -359,10 +350,10 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
                 variant="bold"
                 color="grey100"
                 allowFontScaling={false}>
-                {`${userCurrency}${currencyFormat(final_price)}`}
+                {`${userCurrency}${currencyFormat(offerResponse.final_price)}`}
               </Text>
             </Box>
-            {total_discount > 0 && (
+            {offerResponse.total_discount > 0 && (
               <Box px={8} my={16} bg="lightGreen">
                 <Text
                   variant="medium"
@@ -371,7 +362,7 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
                   lineHeight={24}>
                   Congrats! You’re saving a total of {userCurrency}
                   {''}
-                  {currencyFormat(total_discount)} with App
+                  {currencyFormat(offerResponse.total_discount)} with App
                 </Text>
               </Box>
             )}
@@ -403,7 +394,7 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
                 borderRadius={32}
                 paddingVertical={8}
                 onTouchEnd={() => couponErrorRef.current.showModal()}>
-                <Text variant="semiBold" color="primaryBlue">
+                <Text variant="semiBold" color="#004AAD">
                   Apply
                 </Text>
               </Box>
@@ -411,67 +402,30 @@ const ConfirmDetailsScreen = ({route, navigation}: any) => {
           </Box>
         </Box> */}
 
-        {orderData?.cancellation_policy && (
+        {offerResponse?.cancellation_policy && (
           <Box px={32}>
             <SectionText text="Cancellation Policy" />
             <Box px={8}>
               <Text variant="medium" color="grey200" lineHeight={24}>
-                {orderData?.cancellation_policy}
+                {offerResponse?.cancellation_policy}
               </Text>
             </Box>
           </Box>
         )}
       </ScrollView>
 
-      <AddFieldModal
-        title="Edit Email"
-        confirmLabel="Save"
-        cancelLabel="Cancel"
-        value={tempMailValue}
-        onClose={onMailCancel}
-        placeholder="Add Email"
-        hasError={hasMailError}
-        // fieldText="Edit mail"
-        setValue={setTempMailValue}
-        onConfirmPress={onMailSave}
-        onCancelPress={onMailCancel}
-        onOverlayPress={onMailCancel}
-        visible={isEditMailModalVisible}
-      />
-
       <ConfirmPay
         buttonLoading={isButtonLoading}
-        totalAmount={final_price}
+        totalAmount={offerResponse?.final_price}
         onConfirmPress={payButtonHandler}
       />
-      {/* <BottomSheetModalProvider>
-        <PaymentBottomSheet
-          ref={settleRef}
-          //@ts-ignore
-          event={event}
-          amount={final_price}
-          orderId={orderData?._id}
-          user_details={[
-            {
-              email: mailId,
-              phone: '9431210691', // optional
-            },
-          ]}
-          callback={() => {}}
-        />
-     </BottomSheetModalProvider> */}
       <ErrorHandlingModal
         ref={couponErrorRef}
         description="Invalid Coupon code"
         onPress={() => couponErrorRef?.current?.hideModal()}
         onClose={() => couponErrorRef?.current?.hideModal()}
       />
-      <ErrorHandlingModal
-        ref={mailErrorRef}
-        description="Invalid Email Address"
-        onPress={() => mailErrorRef?.current?.hideModal()}
-        onClose={() => mailErrorRef?.current?.hideModal()}
-      />
+
       <ErrorHandlingModal
         ref={errorRef}
         onPress={() => errorRef?.current?.hideModal()}

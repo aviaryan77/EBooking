@@ -21,12 +21,16 @@ import {
   debounce,
   userCurrency,
 } from '../../helpers/eventHelper';
-import {EventType} from '../../components/experiences/EVENT_DATA';
+import {
+  EventType,
+  PriceBreakupType,
+} from '../../components/experiences/EVENT_DATA';
+import Log from '../../services/Log';
 // import {createOrder, getPriceBreakup} from '../../helperFunctions/Api';
 
 const TicketBookingScreen = ({route, navigation}: any) => {
   const {event, booking_id} = route.params ?? {};
-
+  let price_breakup = event?.price_breakup ?? {};
   type MemberType = 'single' | 'male' | 'female' | 'couple';
   const [memberCount, setMemberCount] = useState({
     single: 0,
@@ -47,6 +51,8 @@ const TicketBookingScreen = ({route, navigation}: any) => {
     total_quantity: 0,
     final_price: 0,
     total_price: 0,
+    convenience_fee: 0,
+    convenience_fee_discount: 0,
   });
 
   let basePrice = event?.price;
@@ -60,10 +66,35 @@ const TicketBookingScreen = ({route, navigation}: any) => {
     let totalMember = sumValues(memberCount);
     setTotalMemberCount(+totalMember);
 
-    if (totalMember) debounce(() => getPrice(), 1000);
+    if (totalMember) debounce(() => getPrice(), 100);
   }, [memberCount]);
 
+  const calculateTotalPrice = (): number => {
+    return price_breakup.reduce((total: number, item: PriceBreakupType) => {
+      const count = memberCount[item.type as MemberType] || 0;
+      const itemTotal = count * item.unit_price;
+      return total + itemTotal;
+    }, 0);
+  };
+
   const getPrice = async () => {
+
+    let sum = calculateTotalPrice();
+
+    setOfferResponse({
+      ...offerResponse,
+      total_price: sum,
+      final_price: sum - 100,
+      total_discount: 100,
+      total_quantity: Object.keys(memberCount).reduce(
+        (acc, key) => acc + memberCount[key as MemberType],
+        0,
+      ),
+
+      convenience_fee: 50,
+      convenience_fee_discount: 50,
+    });
+
     // setIsDataFetching(true);
 
     try {
@@ -100,7 +131,6 @@ const TicketBookingScreen = ({route, navigation}: any) => {
   const sumValues = (obj: object) =>
     Object?.values(obj)?.reduce((a, b) => a + b, 0);
 
-  let price_breakup = event?.price_breakup ?? {};
   let groupTypes = Object.keys(price_breakup ?? []); //'single', 'male',  'female', 'couple' from BE
 
   const onMinusPress = (type: MemberType) => {
@@ -114,6 +144,7 @@ const TicketBookingScreen = ({route, navigation}: any) => {
   };
 
   const onPlusPress = (type: MemberType) => {
+  
     setIsDataFetching(false);
     if (memberCount[type] >= 0 && memberCount[type] < maxMemberCount) {
       setMemberCount({
@@ -138,15 +169,15 @@ const TicketBookingScreen = ({route, navigation}: any) => {
     return (
       <Box>
         {/* @ts-ignore */}
-        {groupTypes?.map((type: MemberType) => {
+        {price_breakup?.map((type: PriceBreakupType) => {
           return (
             <Box
               px={32}
               pt={16}
               pb={20}
               width={W}
-              key={type}
-              bg="primaryWhite"
+              bg="#ffffff"
+              key={type.type}
               flexDirection="row"
               alignItems="center"
               justifyContent="space-between">
@@ -157,16 +188,16 @@ const TicketBookingScreen = ({route, navigation}: any) => {
                   variant="medium"
                   color="#000000"
                   textTransform="capitalize">
-                  {type}
+                  {type.type}
                 </Text>
                 <Text
                   fontSize={12}
                   variant="medium"
                   color="grey200"
                   textTransform="capitalize">
-                  {`${userCurrency}${currencyFormat(
-                    price_breakup[type]?.unit_price,
-                  )}/${type}`}
+                  {`${userCurrency}${currencyFormat(type?.unit_price)}/${
+                    type.type
+                  }`}
                 </Text>
               </Box>
 
@@ -175,20 +206,28 @@ const TicketBookingScreen = ({route, navigation}: any) => {
                 flexDirection="row"
                 alignItems="center"
                 justifyContent="flex-end">
-                <Pressable onPress={() => onMinusPress(type)}>
+                <Pressable onPress={() => onMinusPress(type.type)}>
                   <Center
                     mr={16}
                     width={30}
                     height={30}
                     borderWidth={1}
                     borderRadius={16}
-                    borderColor={memberCount[type] > 0 ? '#000000' : 'grey300'}>
+                    borderColor={
+                      memberCount[type.type as MemberType] > 0
+                        ? '#000000'
+                        : 'grey300'
+                    }>
                     <Text
                       variant="regular"
                       fontSize={16}
                       lineHeight={24}
                       allowFontScaling={false}
-                      color={memberCount[type] > 0 ? '#000000' : 'grey300'}>
+                      color={
+                        memberCount[type.type as MemberType] > 0
+                          ? '#000000'
+                          : 'grey300'
+                      }>
                       &#x2014;
                     </Text>
                   </Center>
@@ -198,12 +237,12 @@ const TicketBookingScreen = ({route, navigation}: any) => {
                   style={{width: 35, marginRight: -7}}
                   ref={counterTexRef}>
                   <Text variant="regular" mr={16} allowFontScaling={false}>
-                    {memberCount[type]}
+                    {memberCount[type.type as MemberType]}
                   </Text>
                 </Animatable.View>
                 <Pressable
                   onPress={() => {
-                    onPlusPress(type);
+                    onPlusPress(type.type);
                   }}>
                   <Center
                     width={30}
@@ -211,7 +250,9 @@ const TicketBookingScreen = ({route, navigation}: any) => {
                     borderWidth={1}
                     borderRadius={16}
                     borderColor={
-                      memberCount[type] < maxMemberCount ? '#000000' : 'grey300'
+                      memberCount[type.type as MemberType] < maxMemberCount
+                        ? '#000000'
+                        : 'grey300'
                     }>
                     <Text
                       fontSize={24}
@@ -219,7 +260,7 @@ const TicketBookingScreen = ({route, navigation}: any) => {
                       variant="regular"
                       allowFontScaling={false}
                       color={
-                        memberCount[type] < maxMemberCount
+                        memberCount[type.type as MemberType] < maxMemberCount
                           ? '#000000'
                           : 'grey300'
                       }>
@@ -247,14 +288,14 @@ const TicketBookingScreen = ({route, navigation}: any) => {
             left={5}
             top={-12}
             zIndex={10}
-            bg="primaryBlue"
+            bg="#004AAD"
             borderRadius={8}
             position="absolute">
             <Text
               fontSize={12}
               variant="bold"
               lineHeight={24}
-              color="primaryWhite"
+              color="#ffffff"
               textTransform="uppercase">
               Offer Applied
             </Text>
@@ -331,13 +372,13 @@ const TicketBookingScreen = ({route, navigation}: any) => {
                   fontSize={10}
                   lineHeight={10}
                   variant="medium"
-                  color="primaryBlue"
+                  color="#004AAD"
                   allowFontScaling={false}>
                   {userCurrency}{' '}
                 </Text>
                 <Text
                   variant="medium"
-                  color="primaryBlue"
+                  color="#004AAD"
                   allowFontScaling={false}
                   textDecorationLine="line-through">
                   {maxPrice}
@@ -370,7 +411,7 @@ const TicketBookingScreen = ({route, navigation}: any) => {
                   {/* <Text
                 variant="medium"
                 allowFontScaling={false}
-                color="primaryBlue">
+                color="#004AAD">
                 View details
               </Text> */}
                 </Box>
@@ -386,7 +427,9 @@ const TicketBookingScreen = ({route, navigation}: any) => {
     // setIsButtonLoading(true);
     navigation.navigate('ConfirmDetailsScreen', {
       event,
-      orderData: 'res.data',
+     memberCount,
+     offerResponse,
+      
     });
 
     try {
@@ -422,7 +465,7 @@ const TicketBookingScreen = ({route, navigation}: any) => {
   };
 
   return (
-    <Screen pt={32} flex={1} width={W} bg="primaryWhite">
+    <Screen pt={32} flex={1} width={W} bg="#ffffff">
       <Header
         pt={8}
         title="Book tickets"

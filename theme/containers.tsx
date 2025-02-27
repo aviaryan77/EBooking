@@ -95,7 +95,7 @@ export const Header: FC<HeaderProps> = ({
   return (
     <Box
       px={16}
-      bg="primaryWhite"
+      bg="#ffffff"
       alignItems="center"
       flexDirection="row"
       justifyContent="space-between"

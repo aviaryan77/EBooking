@@ -41,7 +41,7 @@ const TicketCounter = ({
         <Box
           my={8}
           width="100%"
-          bg="primaryWhite"
+          bg="#ffffff"
           borderTopWidth={1}
           borderTopColor="grey400"
         />
@@ -67,7 +67,7 @@ const TicketCounter = ({
 
               <Text
                 variant="medium"
-                color="primaryBlue"
+                color="#004AAD"
                 textDecorationLine="line-through"
                 allowFontScaling={false}>
                  {userCurrency}{currencyFormat(offerResponse?.total_price)}
@@ -100,7 +100,7 @@ const TicketCounter = ({
         width={W * 0.6}
         borderWidth={1}
         borderRadius={8}
-        bg={selectedCard ? 'green100' : 'primaryWhite'}
+        bg={selectedCard ? 'green100' : '#ffffff'}
         borderColor={selectedCard ? 'green500' : 'grey500'}>
         <Text variant="regular" color="grey150" fontSize={12}>
           {`Group of ${item?.group_size}`}
