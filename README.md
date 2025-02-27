@@ -1,72 +1,83 @@
-# Mini Dashboard
+# EBooking
 
-## 📌 Features
+## Project Overview
+**EBooking** is a cross-platform mobile application built using React Native. It provides an intuitive and seamless experience for booking events.
 
-- 🔐 **Authentication**: Mock-based user authentication.
-- 📊 **Analytics Dashboard**: Dynamic charts and reports using Chart.js.
-- 🎨 **Dark/Light Theme**: Toggle between light and dark mode.
-- 🏠 **Sidebar Navigation**: Smooth navigation experience.
-- ⚡ **Optimized Performance**: Efficient state management with Redux-Saga.
-- 🚀 **Responsive UI**: Fully mobile-friendly and accessible.
+## Installation & Setup
 
-## How to Run the Project Locally
+### Prerequisites
+- Node.js (>=18)
+- Yarn (preferred) or npm
+- React Native CLI
+- Android Studio (for Android builds)
+- Xcode (for iOS builds)
 
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/aviaryan77/mini-dashboard.git
-   cd mini-dashboard
-   ```
-
-2. **Install dependencies:**
-   ```sh
-   yarn
-   ```
-
-3. **Start the development server:**
-   ```sh
-   yarn dev
-   ```
-
-4. **Open your browser and navigate to:**
-   ```
-   http://localhost:3000
-   ```
-
-5. **Login Credentials**
-   ```
-   email: user@example.com 
-   password: password123
-   ```
-
-
-## 🛠️ Technologies Used
-
-- **Next.js 15**: React framework for server-side rendering and static site generation.
-- **Redux & Redux-Saga**: State management with middleware for handling side effects.
-- **Chakra UI & Tailwind CSS**: Component-based styling with utility-first CSS.
-- **Formik & Yup**: Form handling with schema validation.
-- **Chart.js**: Data visualization library for analytics and reports.
-- **React-Error-Boundary**: Graceful error handling for components.
-- **Framer Motion**: Animations and transitions.
-
-
-
-## 📂 Folder Structure
-
+### Install Dependencies
+```sh
+yarn install
 ```
-/mini-dashboard
- ├── /components     # Reusable UI components
- ├── /app            # Next.js pages
- ├── /store          # Redux store and sagas
- ├── /styles         # Global styles and themes
- ├── /public         # Static assets
- ├── /helpers        # Helper functions
- ├── /types          # TypeScript Types
- ├── README.md       # Project documentation
+
+### Running the App
+#### Android
+```sh
+yarn android
 ```
-## 🚀 Deployed URl
+#### iOS
+```sh
+cd ios && pod install && cd ..
+yarn ios
+```
 
-[mini-dashboard](https://mini-dashboard-cyan.vercel.app/app)
+### Start Metro Bundler
+```sh
+yarn start
+```
 
----
+## Features
+- Onboarding flow
+- Event listing & details
+- Ticket booking
+- State management using Redux Toolkit & Redux Saga
+- Navigation using React Navigation
+- Form validation using Formik & Yup
+- Smooth animations with Reanimated & Animatable
+- Offline storage with MMKV & Redux-Persist
 
+## Folder Structure
+```
+EBooking/
+│── src/
+│   ├── components/      # Reusable UI components
+│   ├── screens/         # App screens
+│   ├── navigation/      # Navigation setup
+│   ├── store/           # Redux Saga configurations
+│   ├── assets/          # Images, icons
+│   ├── helpers/         # Helper functions
+│   ├── theme/           # Custom theme
+│── App.tsx              # Root component
+│── package.json         # Dependencies & scripts
+│── README.md            # Project documentation
+```
+
+## Dependencies
+- **Navigation:** `react-navigation`, `react-native-screens`, `react-native-gesture-handler`
+- **State Management:** `@reduxjs/toolkit`, `react-redux`, `redux-saga`, `redux-persist`
+- **Forms & Validation:** `formik`, `yup`
+- **Animations:** `react-native-reanimated`, `react-native-animatable`
+- **Date Handling:** `moment`
+- **Storage:** `react-native-mmkv`
+
+## Running Tests
+```sh
+yarn test
+```
+
+## Building for Release
+### Android
+```sh
+cd android && ./gradlew assembleRelease
+```
+### iOS
+```sh
+cd ios && xcodebuild -scheme EBooking -sdk iphoneos -configuration Release
+```
